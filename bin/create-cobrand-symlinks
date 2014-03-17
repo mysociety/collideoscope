@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Creates symlinks into the main fixmystreet installation dir so they can be
+# used. Should be run as part of the deploy of a FMS vhost.
+
+# abort on any errors
+set -e
+
+# Allow null globs, to prevent weird file creation
+shopt -s nullglob
+
+# check that we are in the expected directory
+cd `dirname $0`/../..
+
+# Overwrite existing files and show filenames
+LN_FLAGS="-s -f -v"
+
+echo "Creating symlinks in $(pwd):"
+
+ln $LN_FLAGS $(pwd)/collideoscope/locale/en_GB.UTF-8/LC_MESSAGES/Smidsy.po fixmystreet/locale/en_GB.UTF-8/LC_MESSAGES/
+ln $LN_FLAGS $(pwd)/collideoscope/perllib/FixMyStreet/Cobrand/Smidsy.pm fixmystreet/perllib/FixMyStreet/Cobrand/
+ln $LN_FLAGS $(pwd)/collideoscope/templates/web/smidsy fixmystreet/templates/web/
+ln $LN_FLAGS $(pwd)/collideoscope/templates/email/smidsy fixmystreet/templates/email/
+ln $LN_FLAGS $(pwd)/collideoscope/web/cobrands/smidsy fixmystreet/web/cobrands/
