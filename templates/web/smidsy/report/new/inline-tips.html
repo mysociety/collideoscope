@@ -1,0 +1,15 @@
+<div class="description_tips">
+    <ul class="do">
+        <li>[% loc('Be polite, and to the point') %]</li>
+        <li>[% loc('Use exact locations') %]</li>
+        <li>[% loc('Describe the events leading up to the incident') %]</li>
+    </ul>
+    <ul class="dont">
+        <li>[% loc('Don’t leave abusive or libellous&nbsp;reports') %]</li>
+        <li>[% loc('Don’t include private contact details in the&nbsp;description') %]</li>
+    </ul>
+</div>
+
+[%- IF category_extras %]
+    [% PROCESS "report/new/category_extras.html" %]
+[%- END %]

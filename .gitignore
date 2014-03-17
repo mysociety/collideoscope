@@ -1,3 +1,8 @@
+*.ttc
+/web/cobrands/*/*.css
+/web/cobrands/*/*.css.map
+/locale
+
 data/stats19/casualties.csv
 data/stats19/vehicles.csv
 data/stats19/accidents.csv
