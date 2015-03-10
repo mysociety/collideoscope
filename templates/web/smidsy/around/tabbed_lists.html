@@ -1,4 +1,8 @@
-<h2 class="incident-list-header">Incidents in this area:</h2>
+<p class="report-list-filters">
+  <input id="show_stats19_checkbox" type="checkbox" [% IF c.req.params.all_pins %]checked[% END %]>
+  <label>Show reports from the Department of Transport</label>
+  <a href="/faq#stats19" title="What is Stats19?">(?)</a>
+</p>
 
 <ul class="incident-list">
     [% INCLUDE "around/combined_map_list_items.html" %]
