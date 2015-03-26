@@ -92,6 +92,12 @@ FixMyStreet::override_config {
         $mech->content_contains( 'data-map_type="OpenLayers.Layer.Stamen"' );
     };
 
+    subtest 'test batch email' => sub {
+        FixMyStreet::Cobrand::Smidsy->new->send_batched;
+        my $email = $mech->get_email;
+        $mech->clear_emails_ok;
+    };
+
     subtest 'Sponsor contact form' => sub {
         $mech->get_ok('/about/sponsors');
         $mech->content_contains('This could be you!');
