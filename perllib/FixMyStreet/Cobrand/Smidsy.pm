@@ -4,6 +4,7 @@ use base 'FixMyStreet::Cobrand::UK';
 use strict;
 use warnings;
 
+use CronFns;
 use FixMyStreet;
 use DateTime;
 use DateTime::Format::Strptime;
@@ -237,7 +238,6 @@ sub report_new_munge_before_insert {
         }
     };
 
-    my $category = "$participant-$severity_code";
     my $title = "$type_description involving $participants";
 
     if (my $injury_detail = $report->get_extra_metadata('injury_detail')) {
@@ -247,7 +247,6 @@ sub report_new_munge_before_insert {
         );
     }
 
-    $report->category($category);
     $report->title($title);
 }
 
@@ -411,4 +410,213 @@ sub reports_hook_restrict_bodies_list {
     }
 }
 
+sub send_batched {
+    my $self = shift;
+
+    my $site = CronFns::site(FixMyStreet->config('BASE_URL'));
+    CronFns::language($site);
+    my ($verbose, $nomail, $debug_mode) = CronFns::options();
+
+    my $rs = FixMyStreet::DB->resultset('Problem');
+    my $unsent = $rs->search( {
+        state => [ 'confirmed' ],
+        whensent => undef,
+        bodies_str => { '!=', undef },
+    } );
+
+    my $debug_unsent_count = 0;
+    print "starting to loop through unsent problem reports...\n" if $debug_mode;
+
+    my (%body_category_senders, %bodies); # caches
+    my %batched_for_body; # store of data for each email alias
+            # %batched_for_body = (
+            #   body_id => (
+            #       'recipient1@example.com' => (
+            #           object => $obj,
+            #           list => [ list, of, problems ],
+            #       ),
+            #       'recipient2@example.com' => (
+            #           object => $obj,
+            #           list => [ list, of, problems ],
+            #       ),
+            #   ),
+            #   ...
+            # )
+
+    while (my $row = $unsent->next) {
+        if ($debug_mode) {
+            $debug_unsent_count++;
+            print $row->id . ": state=" . $row->state . ", bodies_str=" . $row->bodies_str . 
+                ($row->cobrand? ", cobrand=" . $row->cobrand : "") . "\n";
+        }
+
+        if ( $row->is_from_abuser) {
+            $row->update( { state => 'hidden' } );
+            print $row->id . ": hiding because its sender is flagged as an abuser\n" if $debug_mode;
+            next;
+        }
+
+        my $bodies = $row->bodies;
+        for my $body (values %$bodies) {
+            my $body_category = join ',' => $body->id, $row->category;
+            $bodies{$body->id} ||= $body;
+            my $sender_hash = $body_category_senders{$body_category}
+                ||= do {
+                    my $obj = FixMyStreet::SendReport::BatchedEmail->new;
+                    my @recipients = $obj->build_recipient_list_from_body_category($body, $row->category);
+                    {
+                        object => $obj,
+                        recipients => \@recipients,
+                    };
+                };
+            my $sender_object = $sender_hash->{object};
+            my @recipients = @{ $sender_hash->{recipients} };
+
+            for my $recipient (@recipients) {
+                my $node = $batched_for_body{$body->id}{$recipient} ||= {};
+                $node->{sender} ||= $sender_object;
+                push @{ $node->{list} }, $row;
+            }
+        }
+    }
+
+    # now prepare the batches
+    while (my ($body_id, $v) = each %batched_for_body) {
+        my $body = $bodies{$body_id};
+        while (my ($recipient, $v2) = each %$v) {
+            my $sender = $v2->{sender};
+            my @ids = map $_->id, @{$v2->{list}};
+            my $rs_ids = $rs->search({
+                id => \@ids
+            }, {
+                order_by => 'confirmed',
+            });
+            if (!$sender->send_batch($self, $body, $recipient, $rs_ids)) {
+                $rs->search({ id => \@ids })->update({ whensent => \'current_timestamp' });
+            }
+        }
+    }
+}
+
+package FixMyStreet::SendReport::BatchedEmail;
+
+use Moose;
+use LWP::UserAgent;
+
+BEGIN { extends 'FixMyStreet::SendReport::Email'; }
+
+has user_agent => (
+    is => 'ro',
+    lazy => 1,
+    default => sub {
+        LWP::UserAgent->new();
+    },
+);
+
+=head1 send_batch
+
+    $sender->send_batch($cobrand, $body, $recipient, $rs);
+
+=cut
+
+sub send_batch {
+    my ($self, $cobrand, $body, $recipient, $rs) = @_;
+
+    my $incidents = $rs->search({ category => { -not_like => '%miss%'} });
+    my $misses    = $rs->search({ category => { -like     => '%miss%'} });
+    # When getting the counts for the number of people reporting incidents and
+    # near-misses, we must consider all anonymous reports to come from
+    # different users otherwise it's possible to associate multiple anonymous
+    # reports with a single person.
+    my $incidents_people_count = $incidents->search({ anonymous => 0 }, { group_by => 'user_id' })->count;
+    $incidents_people_count += $incidents->search({ anonymous => 1 })->count;
+    my $misses_people_count = $misses->search({ anonymous => 0 }, { group_by => 'user_id' })->count;
+    $misses_people_count += $misses->search({ anonymous => 1 })->count;
+
+    my $period = 'month'; # XXX hardcoded for now
+
+    my @latlon = map { sprintf '%0.3f,%0.3f', $_->latitude, $_->longitude } $rs->all;
+
+    my $map_data = do {
+        my $url = 'https://maps.googleapis.com/maps/api/staticmap?size=598x300&markers=size:mid|'
+            . join '|' => @latlon;
+        my $ua = $self->user_agent;
+        my $resp = $ua->get($url);
+        if ($resp->is_success) {
+            $resp->decoded_content;
+        }
+        else {
+            warn sprintf "Error fetching %s (%s)\n", $url, $resp->status_line;
+        }
+    };
+
+    my ($verbose, $nomail) = CronFns::options();
+    my $params = {
+        From => [ $cobrand->contact_email, $cobrand->contact_name ],
+        To => $recipient,
+    };
+    my $sender = FixMyStreet->config('DO_NOT_REPLY_EMAIL');
+
+    my $vars = {
+        period => $period,
+        body => $body,
+        reports => $rs,
+        cobrand => $cobrand,
+        incidents => $incidents,
+        misses => $misses,
+        static_map => { data => $map_data, content_type => 'image/gif' },
+        incidents_people_count => $incidents_people_count,
+        misses_people_count => $misses_people_count,
+    };
+
+    my $lang = ''; # XXX
+    my $result = FixMyStreet::Email::send_cron($rs->result_source->schema,
+        'batched-report.txt', $vars,
+        $params, $sender, $nomail, $cobrand, $lang);
+
+    unless ($result) {
+        $self->success(1);
+    } else {
+        $self->error( 'Failed to send email' );
+    }
+
+    return $result;
+}
+
+=head2 build_recipient_list_from_body_category
+
+Simplified, and feature-reduced version of ::Email's C<build_recipient_list>.
+We're not currently honouring the 'confirmed' logic.
+
+=cut
+
+sub build_recipient_list_from_body_category {
+    my ($self, $body, $category) = @_;
+
+    my $contact = FixMyStreet::App->model("DB::Contact")->find( {
+        deleted => 0,
+        body_id => $body->id,
+        category => $category
+    } ) or return;
+
+    my @emails = split /,/ => $contact->email;
+    return @emails;
+}
+
 1;
+
+__END__
+consider following for future?
+
+create table batch (
+    id serial not null primary key,
+    created timestamp not null default ms_current_timestamp(),
+    body_id int references body(id) not null,
+    embargo_date timestamp not null,
+);
+
+create table batched_report (
+    id serial not null primary key,
+    batch_id int references batch ON DELETE CASCADE not null,
+    problem_id int references problem(id) ON DELETE CASCADE not null
+);
