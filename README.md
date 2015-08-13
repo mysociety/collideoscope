@@ -22,20 +22,21 @@ In order to import Stats19 Data, you need to:
 2. Set up your perl paths so that you can find the collideoscope code from
    within the FMS environment. For me (in vagrant), it was sufficient to do:
    `$> export PERL5LIB=/home/vagrant/collideoscope/perllib:$PERL5LIB`
+3. `cd` in to the collideoscope directory.
 3. Run the `stats19` script from `\bin` to download the zipfile of data:
-   `$> fixmystreet/bin/cron-wrapper collideoscope/bin/stats19 download`
+   `$> ../fixmystreet/bin/cron-wrapper bin/stats19 download`
 4. Unzip it:
-   `$> fixmystreet/bin/cron-wrapper collideoscope/bin/stats19 unzip`
-5. This will create a vehicles.csv, casualties.csv and accidents.csv in
-   /data/stats19 to complement the existing collection of static data files.
+   `$> ../fixmystreet/bin/cron-wrapper bin/stats19 unzip`
+5. This will create a `vehicles.csv`, `casualties.csv` and `accidents.csv` in
+   `data/stats19` to complement the existing collection of static data files.
    Except they won't be called that, as they get named based on the years of
    data they contain, so rename them to fix that.
 6. "Deploy" the data, meaning load it into the interim SQLite database from
    the collection of CSV files.
-   `$> fixmystreet/bin/cron-wrapper collideoscope/bin/stats19 deploy`
+   `$> ../fixmystreet/bin/cron-wrapper bin/stats19 deploy`
    This will take a long time (several hours on my machine)
 7. Finally, you can import the data into your FMS database:
-   `$> fixmystreet/bin/cron-wrapper collideoscope/bin/stats19 import`
+   `$> ../fixmystreet/bin/cron-wrapper bin/stats19 import`
    If you're running this locally, soon enough you'll trip over mapit's rate
    limiting, because the script calls MapIt for each report. You can kill the
    script at any time and use the data you've got (a few reports are probably
