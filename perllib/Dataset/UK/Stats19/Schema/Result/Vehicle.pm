@@ -28,6 +28,7 @@ __PACKAGE__->add_columns(
     was_vehicle_left_hand_drive_code => {},
     journey_purpose_of_driver_code => {},
     sex_of_driver_code => {},
+    age_of_driver => {},
     age_band_of_driver_code => {},
     engine_capacity_cc => {},
     propulsion_code => {},
