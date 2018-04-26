@@ -80,6 +80,24 @@ sub path_to_pin_icons {
     return '/cobrands/smidsy/images/';
 }
 
+=head2 display_location_extra_params
+
+Return additional Problem query parameters for use in showing problems on the
+/around page during the display_location action. Specialised to return a flag
+to filter problems by the external_body field if the user would like to see
+Stats19 problems.
+
+=cut
+
+sub display_location_extra_params {
+    my $self = shift;
+    my $c = $self->{c};
+    my $show_stats19 = $c->stash->{show_stats19} = $c->get_param('show_stats19');
+    return if $show_stats19;
+    # No external_body, or something other than stats19
+    return { external_body => [ undef, {'!=' => 'stats19'} ] };
+}
+
 sub report_form_extras {
     (
         {

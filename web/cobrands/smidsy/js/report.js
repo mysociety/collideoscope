@@ -1,9 +1,25 @@
+if (stats19_box = document.getElementById('show_stats19_checkbox')) {
+    // Override the protocol initialize to include stats19 toggle
+    OpenLayers.Protocol.FixMyStreet = OpenLayers.Class(OpenLayers.Protocol.FixMyStreet, {
+        initialize: function(options) {
+            options.params = options.params || {};
+            options.params.show_stats19 = stats19_box.checked ? 1 : 0;
+            OpenLayers.Protocol.HTTP.prototype.initialize.apply(this, arguments);
+        }
+    });
+}
+
 $(function() {
 
     // Our validator plugin is old and breaks on date inputs with min/max
     // Let's just disable its min/max validation entirely
     delete $.validator.methods.min;
     delete $.validator.methods.max;
+
+    $('#show_stats19_checkbox').change(function() {
+        fixmystreet.markers.protocol.options.params.show_stats19 = this.checked ? 1 : 0;
+        fixmystreet.markers.refresh( { force: true } );
+    });
 
     $('input[name="severity"]').on('change', function(){
         // Assumes the severity radio buttons have numeric values,

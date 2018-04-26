@@ -38,6 +38,28 @@ FixMyStreet::override_config {
 
     $mech->content_contains( 'Section 170 of the Road Traffic' );
 
+    subtest 'stats19 report filtering' => sub {
+        # Create a stats19 report
+        my %report_params = (
+            latitude => 53.3874014,
+            longitude=> -2.9439968,
+            name => "Stats19 Import",
+            title => "Stats19 Import 1",
+            external_body => 'stats19',
+        );
+        $mech->create_problems_for_body( 1, 2527, 'Around page', \%report_params );
+
+        # They shouldn't be shown by default
+        $mech->content_contains( '<input id="show_stats19_checkbox" type="checkbox" >' );
+        $mech->content_lacks( 'Stats19 Import 1' );
+
+        # Show them
+        $mech->get_ok('/around?latitude=53.387401499999996;longitude=-2.9439968&show_stats19=1');
+
+        $mech->content_contains( '<input id="show_stats19_checkbox" type="checkbox" checked>' );
+        $mech->content_contains( 'Stats19 Import 1' );
+    };
+
     subtest 'custom form fields' => sub {
         $mech->content_contains( 'How severe was the incident?' );
         $mech->content_contains( 'When did it happen?' );
