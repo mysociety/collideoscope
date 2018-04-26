@@ -1,3 +1,10 @@
+fixmystreet.maps.marker_size = function() {
+    return 'normal';
+};
+fixmystreet.maps.selected_marker_size = function() {
+    return 'big';
+};
+
 if (stats19_box = document.getElementById('show_stats19_checkbox')) {
     // Override the protocol initialize to include stats19 toggle
     OpenLayers.Protocol.FixMyStreet = OpenLayers.Class(OpenLayers.Protocol.FixMyStreet, {
