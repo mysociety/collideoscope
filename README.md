@@ -38,3 +38,29 @@ In order to import Stats19 Data, you need to:
    script at any time and use the data you've got (a few reports are probably
    enough for development), or you can wait 3 minutes and re-run until you get
    enough to meet your needs - the script will skip existing reports.
+
+Running this site as part of a FixMyStreet vagrant install
+----------------------------------------------------------
+
+1. Check out this repo, so it’s *alongside* your `fixmystreet` repo:
+
+       cd fixmystreet
+       git clone --recursive git@github.com:mysociety/collideoscope.git ../collideoscope
+
+2. Update your Vagrantfile so that it has access to the `../collideoscope` directory. Once you’re finished, the “synced_folder” lines should look like this:
+
+       config.vm.synced_folder ".", "/home/vagrant/fixmystreet", :owner => "vagrant", :group => "vagrant"
+       config.vm.synced_folder "../collideoscope", "/home/vagrant/collideoscope", :owner => "vagrant", :group => "vagrant"
+
+3. Then start up your FixMyStreet vagrant VM:
+
+       vagrant up && vagrant ssh
+
+4. Inside the vagrant VM, it’s time to set up the new cobrand:
+
+       cd /home/vagrant/fixmystreet
+       ../collideoscope/bin/make_po
+       ../collideoscope/bin/create-cobrand-symlinks
+       script/update
+
+5. Then start your FixMyStreet server process as usual. Collideoscope will be available at the `smidsy.<whatever>` subdomain of whatever local development domain you use, eg: `smidsy.127.0.0.1.xip.io:3000`.
