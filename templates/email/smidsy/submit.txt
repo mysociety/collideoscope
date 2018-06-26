@@ -1,34 +1,42 @@
-Subject: Problem Report: <?=$values['title']?>
+Subject: Problem Report: [% report.title %]
 
-Dear <?=$values['bodies_name']?>,
+Dear [% bodies_name %],
 
-<?=$values['missing']?><?=$values['multiple']?>
-A user of Collideoscope has submitted the following report of a cycling related
-incident that they believe should be brought to your attention.
+[% missing %][% multiple %]A user of [% site_name %] has submitted the
+following report of a cycling related incident that they believe should be
+brought to your attention.
 
-<?=$values['fuzzy']?>, or to provide an update on the problem,
+[% fuzzy %], or to provide an update on the problem,
 please visit the following link:
 
-    <?=$values['url']?>
+    [% url %]
 
-<?=$values['has_photo']?>----------
+[% has_photo %]----------
 
-Name: <?=$values['name']?>
+Name: [% report.name %]
 
-Incident summary: <?=$values['title']?>
+Incident summary: [% report.title %]
  
-Details about the incident: <?=$values['detail']?>
+Details about the incident: [% report.detail %]
 
-<?=$values['easting_northing']?>Latitude: <?=$values['latitude']?>
+Easting/Northing
+[%- " (IE)" IF coordsyst == "I" -%]
+: [% easting %]/[% northing %]
 
-Longitude: <?=$values['longitude']?>
+Latitude: [% report.latitude %]
 
-<?=$values['closest_address']?>----------
+Latitude: [% report.latitude %]
+
+Longitude: [% report.longitude %]
+
+View OpenStreetMap of this location: [% osm_url %]
+
+[% closest_address %]----------
 
 Replies to this email will go to the user who submitted the problem.
- 
-<?=$values['signature']?>
- 
+
+[% signature %]
+
 This message was sent via Collideoscope, created by Integrated Transport 
 Planning (company no. 03485430) and mySociety (company no. 05798215). If there
 is a more appropriate email address for messages about 'Cycling incidents', 
