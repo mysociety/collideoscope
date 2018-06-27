@@ -42,10 +42,10 @@ This is a summary of cycle-related incidents reported on this site. Since the da
     [%- ELSIF ! (loop.count % 2) %] class="a"
     [%- END %]>
     <td class="title"><a href="[% body.url(c) %]">[% body.name %]</a></td>
-    <td class="data">[% open.${body.id}.new_accident   or 0 %]</td>
-    <td class="data">[% open.${body.id}.new_nearmiss   or 0 %]</td>
-    <td class="data">[% ( open.${body.id}.older_accident || 0 ) + ( open.${body.id}.unknown_accident || 0 ) %]</td>
-    <td class="data">[% ( open.${body.id}.older_nearmiss || 0 ) + ( open.${body.id}.unknown_nearmiss || 0 ) %]</td>
+    <td class="data">[% new_accident.${body.id} or 0 %]</td>
+    <td class="data">[% new_miss.${body.id} or 0 %]</td>
+    <td class="data">[% ( older_accident.${body.id} || 0 ) + ( unknown_accident.${body.id} || 0 ) %]</td>
+    <td class="data">[% ( older_miss.${body.id} || 0 ) + ( unknown_miss.${body.id} || 0 ) %]</td>
     </tr>
     [% TRY %][% PROCESS "reports/_extras.html" %][% CATCH file %][% END %]
 [% END %]
