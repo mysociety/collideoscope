@@ -184,19 +184,19 @@ body.mappage {
       }
     }
   }
+}
 
-  .no-incidents {
-    text-align: center;
-    font-size: 18px;
+.item-list__item--empty {
+  text-align: center;
+  font-size: 18px;
 
-    .circled-icon {
-      margin-bottom: 20px;
-      margin-top: 40px;
-      background-color: mix(#f3f3f3, $color-neutral-duckegg, 50%);
+  .circled-icon {
+    margin-bottom: 20px;
+    margin-top: 40px;
+    background-color: mix(#f3f3f3, $color-neutral-duckegg, 50%);
 
-      img {
-        margin-top: 29px; // move the smiley face down
-      }
+    img {
+      margin-top: 29px; // move the smiley face down
     }
   }
 }
