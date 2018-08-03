@@ -207,13 +207,11 @@ body.mappage {
     border-bottom: 1px solid mix(#ccc, $color-neutral-raincloud);
 
     label {
-        display: inline;
         margin: 0;
         color: $color-neutral-slategrey;
         font-weight: normal;
 
         input {
-            margin-left: 10px; // line up with the report icons in the list underneath
             margin-right: 0.2em;
             vertical-align: 1px;
         }
