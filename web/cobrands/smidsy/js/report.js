@@ -20,8 +20,10 @@ $(function() {
 
     // Our validator plugin is old and breaks on date inputs with min/max
     // Let's just disable its min/max validation entirely
-    delete $.validator.methods.min;
-    delete $.validator.methods.max;
+    if ($.validator) {
+        delete $.validator.methods.min;
+        delete $.validator.methods.max;
+    }
 
     $('#show_stats19_checkbox').change(function() {
         fixmystreet.markers.protocol.options.params.show_stats19 = this.checked ? 1 : 0;
@@ -69,6 +71,33 @@ $(function() {
         else if (val == 'dc') {
             window.location = '/reports?type=CTY,DIS';
         }
+    });
+
+    // Handle changes to severity/participants filter selects
+    $("select[name=filter_severity], select[name=filter_participants]").change(function() {
+        var severities = $("select[name=filter_severity]").val();
+        var participants = $("select[name=filter_participants]").val();
+
+        // .val() returns null if none are selected, which in our case means
+        // act as if *all* are selected.
+        if (severities === null ) {
+            severities = $("select[name=filter_severity] option").map(function(i, el) {
+                return $(el).val();
+            }).get();
+        }
+        if (participants === null ) {
+            participants = $("select[name=filter_participants] option").map(function(i, el) {
+                return $(el).val();
+            }).get();
+        }
+
+        var categories = [];
+        $.each(participants, function(i, participant) {
+            $.each(severities, function(j, severity) {
+                categories.push(participant + "-" + severity);
+            });
+        });
+        $("#filter_categories").val(categories).trigger("change");
     });
 
 });
