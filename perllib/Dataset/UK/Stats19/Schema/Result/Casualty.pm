@@ -18,6 +18,7 @@ __PACKAGE__->add_columns(
     casualty_reference => {},
     casualty_class_code => {}, # CasualtyClass
     sex_of_casualty_code => {}, # SexOfCasualty
+    age_of_casualty => {}, # AgeOfCasualty
     age_band_of_casualty_code => {}, # AgeBand
     casualty_severity_code => {}, # CasualtySeverity
     pedestrian_location_code => {}, # PedestrianLocation
