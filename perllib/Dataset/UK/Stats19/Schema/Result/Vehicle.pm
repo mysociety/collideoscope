@@ -33,6 +33,9 @@ __PACKAGE__->add_columns(
     engine_capacity_cc => {},
     propulsion_code => {},
     age_of_vehicle => {},
+    vehicle_imd_decile_code => {
+      is_nullable => 1,
+    },
     driver_imd_decile_code => {},
     driver_home_area_type_code => {},
 );
@@ -132,6 +135,12 @@ __PACKAGE__->belongs_to(
   "driver_imd_decile",
   "Dataset::UK::Stats19::Schema::Result::ImdDecile",
   { 'foreign.code' => 'self.driver_imd_decile_code' },
+);
+
+__PACKAGE__->belongs_to(
+  "vehicle_imd_decile",
+  "Dataset::UK::Stats19::Schema::Result::ImdDecile",
+  { 'foreign.code' => 'self.vehicle_imd_decile_code' },
 );
 
 __PACKAGE__->belongs_to(

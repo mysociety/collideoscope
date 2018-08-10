@@ -28,6 +28,9 @@ __PACKAGE__->add_columns(
     pedestrian_road_maintenance_worker_code => {}, # PedestrianRoadMaintenanceWorker
     casualty_type_code => {}, # CasualtyType
     casualty_home_area_type_code => {}, # HomeAreaType
+    casualty_imd_decile_code => {
+      is_nullable => 1,
+    },
 );
 
 __PACKAGE__->belongs_to(
@@ -41,6 +44,14 @@ __PACKAGE__->belongs_to(
   "Dataset::UK::Stats19::Schema::Result::CasualtyClass",
   { code => "casualty_class_code" },
 );
+
+__PACKAGE__->belongs_to(
+  "casualty_imd_decile",
+  "Dataset::UK::Stats19::Schema::Result::ImdDecile",
+  { 'foreign.code' => 'self.casualty_imd_decile_code' },
+);
+
+
 
 __PACKAGE__->belongs_to(
   "sex_of_casualty",
