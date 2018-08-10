@@ -10,7 +10,7 @@ database, plus all the cobrand code specific to Collideoscope.
 Usage
 -----
 
-In order to import Stats19 Data, you need to:
+In order to import Stats19 data from scratch, you need to run through the following steps. (NB if you are updating Stats19 data skip to step 6b):
 1. Check out this repository alongside the FMS repository that runs your site.
    (Note, if you're using the FMS provided vagrant box, you'll need to edit
    the `Vagrantfile` in order to share the collideoscope folder with vagrant
@@ -19,19 +19,23 @@ In order to import Stats19 Data, you need to:
    within the FMS environment. For me (in vagrant), it was sufficient to do:
    `$> export PERL5LIB=/home/vagrant/collideoscope/perllib:$PERL5LIB`
 3. `cd` in to the collideoscope directory.
-3. Run the `stats19` script from `\bin` to download the zipfile of data:
+4. Run the `stats19` script from `\bin` to download the zipfile of data:
    `$> ../fixmystreet/bin/cron-wrapper bin/stats19 download`
-4. Unzip it:
+5. Unzip it:
    `$> ../fixmystreet/bin/cron-wrapper bin/stats19 unzip`
-5. This will create a `vehicles.csv`, `casualties.csv` and `accidents.csv` in
+6.
+    a) This will create a `vehicles.csv`, `casualties.csv` and `accidents.csv` in
    `data/stats19` to complement the existing collection of static data files.
    Except they won't be called that, as they get named based on the years of
    data they contain, so rename them to fix that.
-6. "Deploy" the data, meaning load it into the interim SQLite database from
+
+    b) If you're updating a single year of Stats19 data, download the **casualties**, **vehicles**, and **accidents** files for the appropriate year from [data.gov.uk](https://data.gov.uk/dataset/cb7ae6f0-4be6-4935-9277-47e5ce24a11f/road-safety-data) and unzip them manually. Then copy or symlink the CSVs into `data/stats19` as `vehicles.csv`, `casualties.csv`, and `accidents.csv`.
+
+7. "Deploy" the data, meaning load it into the interim SQLite database from
    the collection of CSV files.
    `$> ../fixmystreet/bin/cron-wrapper bin/stats19 deploy`
    This will take a long time (several hours on my machine)
-7. Finally, you can import the data into your FMS database:
+8. Finally, you can import the data into your FMS database:
    `$> ../fixmystreet/bin/cron-wrapper bin/stats19 import`
    If you're running this locally, soon enough you'll trip over mapit's rate
    limiting, because the script calls MapIt for each report. You can kill the
