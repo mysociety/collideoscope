@@ -1,6 +1,7 @@
 package Dataset::UK::Stats19::Cmd::Deploy;
 use Moo;
 use MooX::Cmd;
+use MooX::Options;
 use Path::Tiny;
 use Text::CSV_XS;
 use File::BOM;
@@ -16,17 +17,25 @@ has csv => (
     },
 );
 
+option incremental => ( is => 'ro', default => 0 );
+
 sub execute {
     my ($self, $args, $chain) = @_;
     my ($stats19) = @{ $chain };
 
-    unlink $stats19->db_file;
+    unlink $stats19->db_file unless $self->incremental;
 
     my $db = $stats19->db;
 
-    $db->deploy;
+    $db->deploy unless $self->incremental;
 
-    for my $rs_name (qw/
+    my @sources = (qw/
+        Accident
+        Vehicle
+        Casualty
+    /);
+
+    @sources = (qw/
         AccidentSeverity
         AgeBand
         BusPassenger
@@ -72,11 +81,11 @@ sub execute {
         VehicleType
         WasVehicleLeftHandDrive
         WeatherConditions
+        /,
+        @sources
+    ) unless $self->incremental;
 
-        Accident
-        Vehicle
-        Casualty
-    /) {
+    for my $rs_name (@sources) {
         $self->populate_table( $stats19, $rs_name );
     }
 }
