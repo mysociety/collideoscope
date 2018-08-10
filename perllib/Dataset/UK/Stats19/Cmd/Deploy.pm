@@ -165,7 +165,6 @@ sub populate_table {
                     $hash{date} = $date;
                 }
                 $rs->create( \%hash );
-                print '.';
             }
         };
         if ($@) {
