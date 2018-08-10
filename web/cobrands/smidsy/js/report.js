@@ -26,6 +26,10 @@ $(function() {
     }
 
     $('#show_stats19_checkbox').change(function() {
+        // Stats19 data is always going to be considered 'older' due to the delay
+        // in publication, so tick the 'show older reports' box when the Stats19 box
+        // is clicked.
+        $('#show_old_reports').prop('checked', $('#show_old_reports').prop('checked') || this.checked);
         fixmystreet.markers.protocol.options.params.show_stats19 = this.checked ? 1 : 0;
         fixmystreet.markers.refresh( { force: true } );
     });
