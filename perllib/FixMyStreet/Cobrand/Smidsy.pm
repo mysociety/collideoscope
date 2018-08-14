@@ -174,13 +174,6 @@ sub report_form_extras {
             },
         },
         {
-            name => 'registration',
-            validator => sub {
-                # ok not to pass one, just accept anything for now
-                return shift;
-            },
-        },
-        {
             name => 'injury_detail',
             validator => sub { shift } # accept as is
         },

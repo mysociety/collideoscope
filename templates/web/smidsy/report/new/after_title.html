@@ -89,12 +89,3 @@
 	<option value="generic" [% isSelected(exp='generic') %]>
 	[% loc('Nothing (e.g. street furniture)') %]</option>
     </select>
-
-    <div class="vehicle-registration-number">
-	<label for="form_registration">[% loc('What was the vehicle’s registration number?') %]</label>
-      [% IF field_errors.registration %]
-	<p class='form-error'>[% field_errors.registration %]</p>
-      [% END %]
-      <input type="text" name="registration" id="form_registration" placeholder="MA51 ABC"
-      [% IF report.extra.registration%]value="[% report.extra.registration %]"[% END %]>
-    </div>

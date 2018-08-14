@@ -65,7 +65,6 @@ FixMyStreet::override_config {
         $mech->content_contains( 'When did it happen?' );
         $mech->content_contains( 'Where did it happen?' );
         $mech->content_contains( 'The incident involved a bike and' );
-        $mech->content_contains( 'What was the vehicle’s registration number?' );
         $mech->content_contains( 'Can you describe what happened?' );
     };
 
@@ -83,7 +82,6 @@ FixMyStreet::override_config {
                 incident_time => '14:50',
                 road_type => 'road',
                 participants => 'car',
-                registration => 'ABC DEF',
                 detail => 'Hit by red car',
                 media_url => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
             },
