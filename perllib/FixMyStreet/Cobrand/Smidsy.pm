@@ -160,19 +160,6 @@ sub report_form_extras {
             },
         },
         {
-            name => 'emergency_services',
-            validator => sub {
-                my $data = shift;
-                die "Invalid option!\n"
-                    unless {
-                        "yes" => 1,
-                        "no" => 1,
-                        "unsure" => 1,
-                    }->{ $data };
-                return $data;
-            },
-        },
-        {
             name => 'road_type',
             validator => sub {
                 my $data = shift;
