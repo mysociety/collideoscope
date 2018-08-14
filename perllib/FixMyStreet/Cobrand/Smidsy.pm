@@ -421,6 +421,11 @@ sub is_stats19 {
     return $problem->name eq 'Stats19 import';
 }
 
+sub updates_disallowed {
+    my ($self, $problem) = @_;
+    return ($self->{c}->user_exists && $self->{c}->user->id == $problem->user->id) ? 0 : 1;
+}
+
 =head1 reports_hook_restrict_bodies_list
 
 Hook called from FMS::App::Controller::Reports->index

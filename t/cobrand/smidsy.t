@@ -70,6 +70,7 @@ FixMyStreet::override_config {
         $mech->content_contains( 'Can you describe what happened?' );
     };
 
+    my $id;
     subtest 'post an incident' => sub {
         $mech->submit_form_ok({
             form_number => 1,
@@ -94,7 +95,7 @@ FixMyStreet::override_config {
         ok ($mech->content =~ m{<h1><a href="http://collideosco.pe/report/(\d+)">Serious incident involving a bicycle and a vehicle</a></h1>}, "Report posted and showed confirmation page") or do {
             use Encode; print encode_utf8($mech->content);
         };
-        my $id = $1;
+        $id = $1;
 
         ok (my $report = FixMyStreet::DB->resultset('Problem')->find($id),
             "Retrieved report $id from DB") or return;
@@ -112,6 +113,17 @@ FixMyStreet::override_config {
         $mech->content_contains( '<iframe width="320" height="195" src="//www.youtube.com/embed/dQw4w9WgXcQ"' );
         $mech->content_contains( '<img border="0" src="/cobrands/smidsy/images/pin-vehicle-serious.png"' );
         $mech->content_contains( 'data-map_type="OpenLayers.Layer.Stamen"' );
+        $mech->content_contains( 'Provide an update' );
+    };
+
+    subtest 'other users can’t leave updates' => sub {
+        $mech->log_out_ok();
+        $mech->get_ok('/report/' . $id);
+        $mech->content_lacks( 'Provide an update' );
+
+        $mech->log_in_ok('bystander@example.org');
+        $mech->get_ok('/report/' . $id);
+        $mech->content_lacks( 'Provide an update' );
     };
 
     subtest 'test batch email' => sub {
