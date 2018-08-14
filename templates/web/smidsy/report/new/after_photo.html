@@ -1,6 +1,0 @@
-<label for="form_media_url">Or link to a video or webpage</label>
-[% IF field_errors.media_url %]
-    <p class='form-error'>[% field_errors.media_url %]</p>
-[% END %]
-<input type="text" name="media_url" id="form_media_url" placeholder="https://..."
-[% IF report.extra.media_url %]value="[% report.extra.media_url %]"[% END %]>

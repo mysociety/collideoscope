@@ -177,17 +177,6 @@ sub report_form_extras {
             name => 'injury_detail',
             validator => sub { shift } # accept as is
         },
-        {
-            name => 'media_url',
-            validator => sub {
-                my $data = shift
-                    or return '';
-                # die "Please enter a valid URL\n" if $data =~ ... # TODO
-                $data = 'http://' . $data
-                    unless $data =~ m{://};
-                return $data;
-            },
-        },
     )
 }
 
@@ -246,27 +235,6 @@ sub report_new_munge_before_insert {
     }
 
     $report->title($title);
-}
-
-sub get_embed_code {
-    my ($self, $problem) = @_;
-
-    my $media_url = $problem->extra->{media_url}
-        or return;
-
-    my $uri = URI->new( $media_url );
-
-    if ($uri->host =~ /youtube.com$/) {
-        my $v = $uri->query_param('v') or return;
-        return { service => 'youtube', id => $v };
-    }
-
-    if ($uri->host =~ /vimeo.com$/) {
-        my ($v) = $uri->path =~ m{^/(\w+)};
-        return { service => 'vimeo', id => $v };
-    }
-
-    return;
 }
 
 sub prettify_incident_dt {
