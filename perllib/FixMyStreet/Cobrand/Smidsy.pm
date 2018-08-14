@@ -22,6 +22,8 @@ use constant STATS19_IMPORT_USER => 'hakim+smidsy@mysociety.org';
 use constant EARLIEST_STATS19_UPDATE => 2013; # TODO, constant for now
 use constant LATEST_STATS19_UPDATE => 2016; # TODO, constant for now
 
+sub allow_photo_upload { 0 }
+
 sub enter_postcode_text {
     my ( $self ) = @_;
     return _('Street, area, or landmark');
