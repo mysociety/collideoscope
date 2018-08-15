@@ -19,7 +19,8 @@ use constant fourweeks => 4*7*24*60*60;
 use constant language_domain => 'Smidsy';
 
 use constant STATS19_IMPORT_USER => 'hakim+smidsy@mysociety.org';
-use constant LATEST_STATS19_UPDATE => 2013; # TODO, constant for now
+use constant EARLIEST_STATS19_UPDATE => 2013; # TODO, constant for now
+use constant LATEST_STATS19_UPDATE => 2016; # TODO, constant for now
 
 sub enter_postcode_text {
     my ( $self ) = @_;
@@ -359,7 +360,7 @@ sub recent_new {
     my %keys = (
         'new'     => "recent_new:$site_key:$key",
         'miss'    => "recent_new_miss:$site_key:$key",
-        'stats19' => sprintf ("latest_stats19:$site_key:%d", LATEST_STATS19_UPDATE),
+        'stats19' => sprintf ("latest_stats19:$site_key:%d:%d", EARLIEST_STATS19_UPDATE, LATEST_STATS19_UPDATE),
     );
 
     # unfortunately, we can't just do 
@@ -379,7 +380,7 @@ sub recent_new {
 
     my $stats_rs = $rs->search( {
         state => [ FixMyStreet::DB::Result::Problem->visible_states() ],
-        created => { '>=', sprintf ('%d-01-01', LATEST_STATS19_UPDATE ),
+        created => { '>=', sprintf ('%d-01-01', EARLIEST_STATS19_UPDATE ),
                         '<', sprintf ('%d-01-01', LATEST_STATS19_UPDATE+1 ) },
         $user_id ? ( user_id => $user_id ) : (),
     });

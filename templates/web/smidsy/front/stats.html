@@ -3,9 +3,6 @@
 [%
     stats = c.cobrand.front_stats_data();
 
-    stats_period = stats.recency == '1 week' ? 'Week' : 
-        stats.recency == '12 months' ? 'Year' : stats.recency
-
     new_text =
         stats.recency == '1 week'
         ? nget(
@@ -43,7 +40,7 @@
     updates_n = stats.updates | format_number;
 %]
 
-      <h2>This [% stats_period %] on Collideoscope</h2>
+      <h2>Recently on Collideoscope</h2>
 
       <ul class="smidsy-four-column">
         <li>[% tprintf( new_text, new_n ) %]</li>
