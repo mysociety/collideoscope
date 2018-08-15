@@ -31,6 +31,8 @@ sub enter_postcode_text {
     return _('Street, area, or landmark');
 }
 
+sub report_sent_confirmation_email { 1 }
+
 sub severity_categories {
     return [
         {
