@@ -61,13 +61,17 @@ div.form_datetime {
             margin-top: 0;
         }
     }
+
+    .report-to-police {
+        background-color: $color-neutral-cream;
+
+        & > :last-child {
+            margin-bottom: 0;
+        }
+    }
 }
 
 .severity {
-    label {
-        margin-top: 0;
-    }
-
     p {
         margin-bottom: 0.5em;
 
@@ -77,6 +81,7 @@ div.form_datetime {
 
         label {
             font-weight: normal;
+            margin-top: 0;
         }
 
         input {

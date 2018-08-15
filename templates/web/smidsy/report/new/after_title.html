@@ -2,6 +2,29 @@
 [% MACRO isChecked BLOCK %][% v == exp ? 'checked' : '' %][% END %]   
 [% MACRO isSelected BLOCK %][% v == exp ? 'selected' : '' %][% END %]
 
+    <label for="form_participants">[% loc('The incident involved a bike and…?') %]</label>
+    [% IF field_errors.participants %]
+	<p class='form-error'>[% field_errors.participants %]</p>
+    [% END %]
+
+    [% v = report.extra.participants %]
+    <select id="form_participants" name="participants" class="form-control">
+	<option value="car" [% isSelected(exp='car') %]>
+	[% loc('A car') %]</option>
+	<option value="motorcycle" [% isSelected(exp='motorcycle') %]>
+	[% loc('A motorcycle') %]</option>
+	<option value="hgv" [% isSelected(exp='hgv') %]>
+	[% loc('A heavy goods vehicle (HGV)') %]</option>
+	<option value="other" [% isSelected(exp='other') %]>
+	[% loc('Some other vehicle') %]</option>
+	<option value="bicycle" [% isSelected(exp='bicycle') %]>
+	[% loc('Another bike') %]</option>
+	<option value="pedestrian" [% isSelected(exp='pedestrian') %]>
+	[% loc('A pedestrian') %]</option>
+	<option value="generic" [% isSelected(exp='generic') %]>
+	[% loc('Nothing (e.g. street furniture)') %]</option>
+    </select>
+
     <fieldset class="severity">
 	<legend>[% loc('How severe was the incident?') %]</legend>
 	[% IF field_errors.severity %]
@@ -25,6 +48,12 @@
 		[% loc('There were one or more fatalities') %]</label>
 	</p>
     </fieldset>
+
+    <div class="report-to-police form-box" role="alert" style="display: none">
+        <p id="oh-no"><strong>Oh no! We hope you’re OK.</strong></p>
+        <p>As well as using this form to notify the local council, we <strong>strongly</strong> recommend you also report your incident to the police.</p>
+        <p>We’ll give you a direct link to the local police force’s reporting form after confirmation.</p>
+    </div>
 
     <div class="form_datetime">
 	<label for="form_incident_date">[% loc('When did it happen?') %]</label>
@@ -60,27 +89,4 @@
 	    [% loc('Segregated bike path') %]</option>
 	<option value="pavement" [% isSelected(exp='pavement') %]>
 	    [% loc('Pavement') %]</option>
-    </select>
-
-    <label for="form_participants">[% loc('The incident involved a bike and…?') %]</label>
-    [% IF field_errors.participants %]
-	<p class='form-error'>[% field_errors.participants %]</p>
-    [% END %]
-
-    [% v = report.extra.participants %]
-    <select id="form_participants" name="participants" class="form-control">
-	<option value="car" [% isSelected(exp='car') %]>
-	[% loc('A car') %]</option>
-	<option value="motorcycle" [% isSelected(exp='motorcycle') %]>
-	[% loc('A motorcycle') %]</option>
-	<option value="hgv" [% isSelected(exp='hgv') %]>
-	[% loc('A heavy goods vehicle (HGV)') %]</option>
-	<option value="other" [% isSelected(exp='other') %]>
-	[% loc('Some other vehicle') %]</option>
-	<option value="bicycle" [% isSelected(exp='bicycle') %]>
-	[% loc('Another bike') %]</option>
-	<option value="pedestrian" [% isSelected(exp='pedestrian') %]>
-	[% loc('A pedestrian') %]</option>
-	<option value="generic" [% isSelected(exp='generic') %]>
-	[% loc('Nothing (e.g. street furniture)') %]</option>
     </select>
