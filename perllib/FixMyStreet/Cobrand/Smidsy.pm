@@ -267,6 +267,8 @@ sub send_questionnaires {
     return 0;
 }
 
+sub report_age { undef }
+
 =head2 front_stats_data
 
 Return a data structure containing the front stats information that a template
