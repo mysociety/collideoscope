@@ -28,7 +28,7 @@
 
     <div class="describe-injury">
 	<label for="form_injury_detail">[% loc('If <em>you</em> were injured, can you tell us more about your injuries?') %]</label>
-	<textarea rows="4" cols="26" name="injury_detail" id="form_injury_detail">[% report.extra.injury_detail | html %]</textarea>
+	<textarea rows="4" cols="26" name="injury_detail" id="form_injury_detail" class="form-control">[% report.extra.injury_detail | html %]</textarea>
     </div>
 
     <div class="form_datetime">
@@ -37,7 +37,7 @@
 	  [% IF field_errors.incident_date %]
 	    <p class='form-error'>[% field_errors.incident_date %]</p>
 	  [% END %]
-	    <input type="date" name="incident_date" id="form_incident_date"
+	    <input type="date" name="incident_date" id="form_incident_date" class="form-control"
 	    min="[% date.format(date.now - 366*86400*5, format => '%Y-%m-%d') %]"
 	    max="[% date.format(format => '%Y-%m-%d') %]"
 	    value="[% report.extra.incident_date || date.format(format => '%Y-%m-%d') %]">
@@ -46,7 +46,7 @@
 	  [% IF field_errors.incident_time %]
 	    <p class='form-error'>[% field_errors.incident_time %]</p>
 	  [% END %]
-	    <input type="time" name="incident_time" id="form_incident_time" placeholder="hh:mm"
+	    <input type="time" name="incident_time" id="form_incident_time" class="form-control"
 	    value="[% report.extra.incident_time || date.format(format => '%H:%M') %]">
 	</div>
     </div>
@@ -56,7 +56,7 @@
     <p class='form-error'>[% field_errors.road_type %]</p>
   [% END %]
   [% v = report.extra.road_type %]
-    <select id="form_road_type" name="road_type">
+    <select id="form_road_type" name="road_type" class="form-control">
 	<option value="road" [% isSelected(exp='road') %]>
 	    [% loc('In the road') %]</option>
 	<option value="lane-onroad" [% isSelected(exp='lane-onroad') %]>
@@ -73,7 +73,7 @@
     [% END %]
 
     [% v = report.extra.participants %]
-    <select id="form_participants" name="participants">
+    <select id="form_participants" name="participants" class="form-control">
 	<option value="car" [% isSelected(exp='car') %]>
 	[% loc('A car') %]</option>
 	<option value="motorcycle" [% isSelected(exp='motorcycle') %]>
