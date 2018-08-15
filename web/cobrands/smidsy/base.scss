@@ -407,6 +407,23 @@ dt:target {
     }
 }
 
+.confirmation-header {
+  h4 {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+}
+
+p.confirmation-header__cta {
+  font-size: 1.1em; // down slightly from 1.2em, because we want a slightly smaller button
+  margin: 1.5em 0 2em 0; // vertical margin to make the button stand out
+}
+
+p.confirmation-header__more {
+  font-size: 1em; // down from 1.2em for regular paragraphs
+  line-height: 1.5;
+}
+
 // mySociety standard footer bits
 $mysoc-footer-background-color: $color-neutral-slategrey;
 $mysoc-footer-text-color: mix(#fff, $color-neutral-slategrey, 50%);

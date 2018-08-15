@@ -11,7 +11,9 @@ use DateTime::Format::Strptime;
 use Utils;
 use URI;
 use URI::QueryParam;
-use JSON;
+use JSON::MaybeXS;
+use LWP::UserAgent;
+use Try::Tiny;
 use List::Util 'first';
 
 use constant fourweeks => 4*7*24*60*60;
@@ -64,12 +66,48 @@ sub get_severity {
         reverse @{ $self->severity_categories };
 }
 
+sub get_police_info {
+    my ($self, $report) = @_;
+
+    my $extra = $report->get_extra_metadata;
+    return $extra->{police} if $extra->{police};
+
+    my @data = eval { FixMyStreet->path_to('../collideoscope/data/police-force-urls.csv')->slurp };
+    my %data;
+    foreach (@data) {
+        chomp;
+        my ($id, $name, $url) = split /\|/;
+        $data{$id} = {
+            name => $name,
+            url => $url,
+        };
+    }
+    return unless %data;
+
+    my ($lat, $lon) = ($report->latitude, $report->longitude);
+
+    my $ua = new LWP::UserAgent();
+    $ua->agent("collideoscope.org.uk");
+    my $r = $ua->get("https://data.police.uk/api/locate-neighbourhood?q=$lat,$lon");
+
+    my $j = try {
+        JSON->new->utf8->allow_nonref->decode($r->content);
+    };
+    return unless $j && $j->{force};
+
+    my $ret = $data{$j->{force}};
+    # Set this so HTML email template can get it immediately
+    $report->set_extra_metadata('police' => $ret);
+    return $ret;
+}
+
 sub area_types          {
     my $self = shift;
     my $area_types = $self->next::method;
     [
         @$area_types,
         'GLA', # Greater London Authority
+        'POL', # Police Forces
     ];
 }
 
