@@ -1,0 +1,34 @@
+Subject: [% site_name %] Report Sent: [% title %]
+
+Hello,
+
+Thank you for using [% site_name %] to submit your incident report.
+
+This is to confirm that it has now been sent to [% bodies_name %].
+
+Your report has also been published on [% site_name %]: [% url %]
+
+If you'd like to update your council, please wait for their reply so that you
+can respond to them directly.
+
+Next steps:
+
+[% IF report.extra.severity > 10;
+    police = cobrand.get_police_info(report)
+~%]
+ - We recommend reporting this to
+    [%~ IF police %] [% police.name %] – [% police.url %]
+    [%~ ELSE %] the police.
+    [%~ END %]
+[%~ END %]
+
+ - Browse the [% site_name %] map to see if this area is a known hotspot for accidents.
+
+ - If you’d like to take the matter further, why not use another of our sites, WriteToThem, to contact your local councillors: https://www.writetothem.com/
+
+ - Consider getting in touch with your local campaign group to help work towards safer road conditions for cyclists: https://www.cyclinguk.org/groups-listing
+
+[% signature %]
+
+This email was sent automatically, from an unmonitored email account - so
+please do not reply to it.
