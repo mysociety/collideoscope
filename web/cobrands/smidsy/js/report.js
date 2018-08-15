@@ -32,6 +32,36 @@ $(function() {
         fixmystreet.markers.refresh( { force: true } );
     });
 
+    var involvedInjury = function involvedInjury() {
+        // Assumes the severity radio buttons have numeric values,
+        // where a value over 10 implies injury.
+        return ( $('input[name="severity"]:checked').val() - 0 ) > 10
+    };
+
+    var involvedFatality = function involvedFatality() {
+        return ( $('input[name="severity"]:checked').val() - 0 ) >= 100;
+    };
+
+    var involvedVehicle = function involvedVehicle() {
+        var vehicles = ["car", "motorcycle", "hgv", "other"];
+        return $.inArray($('select[name="participants"]').val(), vehicles) > -1;
+    };
+
+    var shouldContactPolice = function shouldContactPolice() {
+        return involvedInjury() && involvedVehicle();
+    };
+
+    $('input[name="severity"], select[name="participants"]').on('change', function(){
+        $('#oh-no').toggle(!involvedFatality());
+
+        if ( shouldContactPolice() ) {
+            $('.report-to-police').slideDown();
+        } else {
+            // slideUp doesn't happen if element already hidden.
+            $('.report-to-police').slideUp();
+        }
+    }).change(); // and call on page load
+
     var type = $('form.statistics-filter input[name=type]');
     type.on('change', function () {
         var val = $(this).val();
