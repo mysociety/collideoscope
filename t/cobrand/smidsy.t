@@ -78,7 +78,6 @@ FixMyStreet::override_config {
                 longitude => -2.943997,
                 name => 'Test Cyclist',
                 severity => 60, # Serious
-                injury_detail => 'Broken shoulder',
                 incident_date => '2014-12-31',
                 incident_time => '14:50',
                 road_type => 'road',
@@ -102,7 +101,6 @@ FixMyStreet::override_config {
         $mech->content_contains( '<h1>Serious incident involving a bicycle and a vehicle</h1>' );
         $mech->content_contains( 'Reported by Test Cyclist at' );
         $mech->content_contains( '(incident occurred: 14:50' );
-        $mech->content_contains( 'Details about injuries: Broken shoulder');
         $mech->content_contains( 'Serious ( incident involved serious injury or hospitalisation )' );
         $mech->content_contains( '<img border="0" src="/cobrands/smidsy/images/pin-vehicle-serious.png"' );
         $mech->content_contains( 'data-map_type="OpenLayers.Layer.Stamen"' );

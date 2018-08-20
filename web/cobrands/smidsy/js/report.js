@@ -32,22 +32,6 @@ $(function() {
         fixmystreet.markers.refresh( { force: true } );
     });
 
-    $('input[name="severity"]').on('change', function(){
-        // Assumes the severity radio buttons have numeric values,
-        // where a value over 10 implies injury.
-        if( ($('#mapForm input[name="severity"]:checked').val() -0) > 10) {
-            $('.describe-injury').slideDown();
-        } else {
-            $('.describe-injury').slideUp(
-                // slideUp doesn't happen if element already hidden.
-                // But it does call callback so hide when complete.
-                // (We hide on callback, to avoid the hide killing the slide
-                // animation entirely.)
-                function () { $(this).hide() }
-            );
-        }
-    }).change(); // and call on page load
-
     var type = $('form.statistics-filter input[name=type]');
     type.on('change', function () {
         var val = $(this).val();

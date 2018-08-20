@@ -175,10 +175,6 @@ sub report_form_extras {
                 return $data;
             },
         },
-        {
-            name => 'injury_detail',
-            validator => sub { shift } # accept as is
-        },
     )
 }
 
@@ -228,13 +224,6 @@ sub report_new_munge_before_insert {
     };
 
     my $title = "$type_description involving $participants";
-
-    if (my $injury_detail = $report->get_extra_metadata('injury_detail')) {
-        $report->detail(
-            $report->detail .
-                "\n\nDetails about injuries: $injury_detail\n"
-        );
-    }
 
     $report->title($title);
 }
