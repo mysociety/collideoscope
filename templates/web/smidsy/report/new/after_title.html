@@ -2,12 +2,12 @@
 [% MACRO isChecked BLOCK %][% v == exp ? 'checked' : '' %][% END %]   
 [% MACRO isSelected BLOCK %][% v == exp ? 'selected' : '' %][% END %]
 
-    <div class="severity">
+    <fieldset class="severity">
+	<legend>[% loc('How severe was the incident?') %]</legend>
 	[% IF field_errors.severity %]
 	    <p class='form-error'>[% field_errors.severity %]</p>
 	[% END %]
-	<label>[% loc('How severe was the incident?') %]</label>
-	[% v = report.extra.severity || 10 %]
+    [% v = report.extra.severity || 10 %]
 	<p>
 	    <label><input type="radio" name="severity" value="10" [% isChecked(exp=10) %]>
 	    [% loc('No injuries – but it was close!') %]</label>
@@ -24,7 +24,7 @@
 	    <label><input type="radio" name="severity" value="100" [% isChecked(exp=100) %]>
 		[% loc('There were one or more fatalities') %]</label>
 	</p>
-    </div>
+    </fieldset>
 
     <div class="form_datetime">
 	<label for="form_incident_date">[% loc('When did it happen?') %]</label>

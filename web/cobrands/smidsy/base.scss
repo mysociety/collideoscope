@@ -24,6 +24,14 @@ select, input, textarea {
   max-width: none;
 }
 
+ // match label styling
+legend {
+  display: block;
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+}
+
 div.form_datetime {
     overflow: auto;
 
