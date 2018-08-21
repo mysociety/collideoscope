@@ -24,7 +24,7 @@ use constant LATEST_STATS19_UPDATE => 2016; # TODO, constant for now
 
 sub enter_postcode_text {
     my ( $self ) = @_;
-    return _('Street, area, or landmark');
+    return _('Enter a street, area, or landmark');
 }
 
 sub severity_categories {
