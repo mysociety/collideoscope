@@ -49,12 +49,14 @@ sub execute {
     my $user_id = $self->user->id;
 
     my $failed = 0;
+    my @problems = $problem_rs->search({ external_id => { '!=', undef } }, { columns => [ 'external_id'] })->all;
+    my %problems = map { $_->external_id => $_ } @problems;
 
     while (my $v = $vehicles->next) {
         my $accident = $v->accident;
         next unless $accident->accident_index;
 
-        if ($problem_rs->search({ external_id => $accident->accident_index })->count) {
+        if ($problems{$accident->accident_index}) {
             say sprintf "Index %s already exists!", $accident->accident_index;
             next;
         }
