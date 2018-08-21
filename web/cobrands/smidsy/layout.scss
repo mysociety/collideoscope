@@ -356,6 +356,16 @@ body.twothirdswidthpage {
   }
 }
 
+.front__data {
+  background-image: linear-gradient(90deg, #fff 60%, transparent 80%), url("/cobrands/smidsy/images/map.jpg");
+  background-position: 100% 50%;
+  background-repeat: no-repeat;
+
+  p {
+    max-width: 60%;
+  }
+}
+
 .front__statistics {
   strong {
     font-size: 64px;

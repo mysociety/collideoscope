@@ -219,6 +219,7 @@ body.twothirdswidthpage {
 }
 
 .front__how-it-works,
+.front__data,
 .front__statistics,
 .front__support {
   text-align: center;
@@ -297,6 +298,35 @@ body.twothirdswidthpage {
         line-height: 1em;
         margin: 0 0.1em;
     }
+}
+
+.front__data {
+  text-align: inherit;
+  border-top: 1px solid $color-neutral-raincloud;
+  background-color: #fff;
+}
+
+.front__data__cta {
+  margin: 1.5em 0;
+
+  a {
+    display: inline-block;
+    border-radius: 3px;
+    background: $color-primary-orange;
+    color: #fff;
+    padding: 0.5em 1em;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+
+    &:hover {
+      background: darken($color-primary-orange, 10%);
+    }
+  }
+
+  small {
+    display: block;
+    margin-top: 0.5em;
+    font-style: normal;
+  }
 }
 
 .front__support {
