@@ -105,7 +105,8 @@ body.twothirdswidthpage {
   }
 
   h1 {
-    margin-top: 0;
+    line-height: 1.2;
+    margin: 0 auto 0.5em auto;
   }
 
   p {
@@ -114,7 +115,9 @@ body.twothirdswidthpage {
 
   p.lead {
     font-size: 1.5em;
-    margin-bottom: 10px;
+    line-height: 1.2;
+    margin: 0 auto 0.5em auto;
+    max-width: 24em;
   }
 
   #postcodeForm {
@@ -124,11 +127,8 @@ body.twothirdswidthpage {
 
     label {
       color: inherit;
-      margin: 0 0 0.6em 0;
-
-      html.js & {
-        display: none;
-      }
+      margin: 0.5em 0 16px 0;
+      font-size: 21px;
     }
 
     div {
@@ -136,6 +136,8 @@ body.twothirdswidthpage {
       background-color: transparent;
       @include box-shadow(0 1px 3px rgba(0,0,0,0.3));
       font-size: 21px;
+
+      @include flex-container();
 
       input#pc {
         width: 80%; // down from default 86%;
