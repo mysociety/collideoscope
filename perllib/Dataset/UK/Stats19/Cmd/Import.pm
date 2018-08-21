@@ -56,7 +56,7 @@ sub execute {
 
         if ($problem_rs->search({ external_id => $accident->accident_index })->count) {
             say sprintf "Index %s already exists!", $accident->accident_index;
-	    next;
+            next;
         }
 
         next unless $accident->date;
@@ -110,7 +110,7 @@ sub execute {
 
         my $problem = $problem_rs->create(
             {
-		        external_id  => $accident->accident_index,
+                external_id  => $accident->accident_index,
                 external_body => 'stats19',
                 postcode     => '',
                 latitude     => $accident->latitude,
@@ -221,24 +221,14 @@ sub _vehicle_priority {
 sub get_areas {
     my ($self, $latitude, $longitude) = @_;
 
-    # cargo culted from FixMyStreet/App/Controller/Council.pm load_and_check_areas
     my $short_latitude  = Utils::truncate_coordinate($latitude);
     my $short_longitude = Utils::truncate_coordinate($longitude);
-
-    my %area_types = map { $_ => 1 } @{ $self->cobrand->area_types };
-
     my $all_areas = eval {
         mySociety::MaPit::call(
             'point',
             "4326/$short_longitude,$short_latitude"
         )
     } or return;
-
-    $all_areas = {
-        map { $_ => $all_areas->{$_} }
-        grep { $area_types{ $all_areas->{$_}->{type} } }
-        keys %$all_areas
-    };
 
     return keys %$all_areas;
 }
