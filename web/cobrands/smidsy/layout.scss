@@ -335,13 +335,14 @@ body.twothirdswidthpage {
 }
 
 .front__how-it-works,
-.front__statistics,
-.front__support {
-
+.front__data,
+.front__why {
   h2 {
     font-size: 32px;
   }
+}
 
+.front__how-it-works {
   p, ul {
     font-size: 20px;
     line-height: 28px;
@@ -357,32 +358,54 @@ body.twothirdswidthpage {
 }
 
 .front__data {
-  background-image: linear-gradient(90deg, #fff 60%, transparent 80%), url("/cobrands/smidsy/images/map.jpg");
+  border-top: 1px solid $color-neutral-raincloud;
+  border-bottom: 1px solid $color-neutral-raincloud;
+  background-image: linear-gradient(90deg, $color-neutral-raincloud 60%, transparent 80%), url("/cobrands/smidsy/images/map.jpg");
   background-position: 100% 50%;
   background-repeat: no-repeat;
+
+  h2 {
+    margin-top: 0.4em;
+  }
 
   p {
     max-width: 60%;
   }
 }
 
-.front__statistics {
-  strong {
-    font-size: 64px;
-    line-height: 64px;
-    margin-bottom: 10px;
+.squidgy-quote {
+  position: relative;
+  margin-top: 2em;
+
+  p {
+    margin: -20px -15px;
+  }
+
+  p + p {
+    margin-top: 30px;
   }
 }
 
-.front__stats19 {
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
+.squidgy-quote--left {
+  margin-left: 100px;
 
-    strong {
-        font-size: 1.2em;
-        line-height: 1em;
-        margin: 0 0.1em;
-    }
+  img {
+    display: block;
+    position: absolute;
+    left: -150px;
+    bottom: -50px;
+  }
+}
+
+.squidgy-quote--right {
+  margin-right: 100px;
+
+  img {
+    display: block;
+    position: absolute;
+    right: -150px;
+    bottom: -50px;
+  }
 }
 
 .smidsy-two-column,
