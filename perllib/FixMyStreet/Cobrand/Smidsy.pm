@@ -371,6 +371,11 @@ sub is_stats19 {
     return $problem->name eq 'Stats19 import';
 }
 
+sub moderate_permission {
+    my ($self, $user, $type, $object) = @_;
+    return $user->id == $object->user->id;
+}
+
 =head1 reports_hook_restrict_bodies_list
 
 Hook called from FMS::App::Controller::Reports->index
