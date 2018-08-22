@@ -216,11 +216,9 @@ body.twothirdswidthpage {
 
 .front__how-it-works,
 .front__data,
-.front__statistics,
-.front__support {
+.front__why {
   text-align: center;
   padding: 2em 0;
-  // font-size: 21px;
   color: $color-neutral-duckegg;
 
   h2 {
@@ -228,7 +226,7 @@ body.twothirdswidthpage {
     font-size: 28px; // up from the default 1.5em (24px on 16px base)
   }
 
-  h3, .front__support__cta {
+  h3 {
     margin-top: 0;
     font-size: 24px; // up from default 1.25em (20px on 16px base)
     font-weight: bold;
@@ -245,7 +243,7 @@ body.twothirdswidthpage {
 }
 
 .front__how-it-works,
-.front__support {
+.front__why {
   background-color: #fff;
 }
 
@@ -271,35 +269,10 @@ body.twothirdswidthpage {
   background-color: $color-secondary-brown;
 }
 
-.front__statistics {
-  background-color: $color-neutral-raincloud;
-  text-shadow: 0 1px 0 mix(#fff, $color-neutral-raincloud, 70%);
-
-  strong {
-    display: block; // break onto new line
-    font-weight: normal;
-    font-family: Oswald, Impact, sans-serif;
-    font-size: 54px;
-    line-height: 62px;
-  }
-}
-
-.front__stats19 {
-    margin-top: 2em;
-    margin-bottom: 0;
-
-    strong {
-        display: inline;
-        font-size: 1.2em;
-        line-height: 1em;
-        margin: 0 0.1em;
-    }
-}
-
 .front__data {
   text-align: inherit;
-  border-top: 1px solid $color-neutral-raincloud;
-  background-color: #fff;
+  background-color: $color-neutral-raincloud;
+  color: mix(#000, #6b9094, 30%);
 }
 
 .front__data__cta {
@@ -325,13 +298,9 @@ body.twothirdswidthpage {
   }
 }
 
-.front__support {
-  text-align: left;
-
-  & + .container > div:first-child {
-    // This is the extra div created by our tag-closing trickery.
-    display: none;
-  }
+// This is the extra div created by our tag-closing trickery.
+.container.hidden {
+  display: none;
 }
 
 .circled-icon {
@@ -347,6 +316,59 @@ body.twothirdswidthpage {
     width: 50px;
     height: 50px;
     margin-top: 25px;
+  }
+}
+
+.front__why {
+  padding-bottom: 4em;
+}
+
+.squidgy-quote {
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+  font-size: 18px;
+  line-height: 1.4;
+  text-align: left;
+  margin-top: 1em;
+
+  border: 50px solid $color-secondary-blue;
+  border-image: url("/cobrands/smidsy/images/quote-blue.svg") 100;
+  background: $color-secondary-blue;
+
+  p {
+    margin: -25px -20px;
+  }
+
+  p + p {
+    margin-top: 35px;
+  }
+
+  img {
+    display: none;
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+    border: 5px solid $color-secondary-blue;
+  }
+}
+
+.squidgy-quote--aquamarine {
+  border-color: $color-secondary-aquamarine;
+  border-image-source: url("/cobrands/smidsy/images/quote-aquamarine.svg");
+  background: $color-secondary-aquamarine;
+
+  img {
+    border-color: $color-secondary-aquamarine;
+  }
+}
+
+.squidgy-quote--olive {
+  border-color: $color-secondary-olive;
+  border-image-source: url("/cobrands/smidsy/images/quote-olive.svg");
+  background: $color-secondary-olive;
+
+  img {
+    border-color: $color-secondary-olive;
   }
 }
 
