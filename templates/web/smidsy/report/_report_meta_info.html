@@ -1,0 +1,14 @@
+<p>
+  [% IF (c.cobrand.is_stats19(problem)) %]
+    Reported to the police and recorded by Stats19
+  [% ELSIF problem.anonymous %]
+    Reported anonymously at [% date_time %]
+  [% ELSE %]
+    Reported by [% problem.name %] at [% prettify_dt(problem.confirmed) %]
+  [% END %]
+    (incident occurred: [% c.cobrand.prettify_incident_dt(problem) %])
+
+  [%- IF !problem.used_map %];
+    <strong>[% loc('there is no pin shown as the user did not use the map') %]</strong>
+  [% END %]
+</p>
