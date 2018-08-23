@@ -52,12 +52,6 @@ body {
   }
 }
 
-.content {
-  @include box-shadow(none);
-  margin-left: 15px; // to match nav items
-  margin-right: 15px; // to match nav items
-}
-
 .mysoc-footer {
   // The below lines are so that on e.g. /faq the footer will move on
   // top of the fixed sidebar in narrow height situations.
@@ -277,6 +271,7 @@ body.twothirdswidthpage {
         background-color: $color-neutral-raincloud;
         width: 15em;
         padding: 0;
+        margin: 0;
 
         aside {
           box-shadow: none;
