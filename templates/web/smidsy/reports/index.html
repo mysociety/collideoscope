@@ -1,55 +1,90 @@
-[% INCLUDE 'header.html', title = loc('Statistics'),  bodyclass => 'fullwidthpage' %]
+[% USE date -%]
+[% extra_js = [
+    version('/vendor/chart.min.js'),
+    version('/vendor/accessible-autocomplete.min.js'),
+    version('/js/dashboard.js')
+] -%]
+[% INCLUDE 'header.html', title = loc('Statistics'),  bodyclass => 'dashboard fullwidthpage' %]
 
-<h1>[% loc('Statistics') %]</h1>
-
-<div class="intro">
-<p>
-This is a summary of cycle-related incidents reported on this site. Since the data relies on user-submitted reports, you shouldn’t use it to compare the safety of different areas.
-</p>
+<div class="dashboard-header">
+    <h1>[% loc('Statistics') %]</h1>
+    <p>
+        Cyclists all over the UK contribute to Collideoscope’s database of cycling incidents and near misses. You can use the filters on this page to explore the data for the whole UK, a specific area, or a particular time range. And you can download the data currently on view as a CSV, for your own use.
+    </p>
+    <p>
+        Just bear in mind, Collideoscope relies on user-submitted reports, so you shouldn’t use it to compare the absolute safety of different areas.
+    </p>
 </div>
 
-<form method="get" class="statistics-filter">
-  Show:
-  <label><input type="radio" name="type" value="all" 
-      [% IF report_filter == 'all' %]checked[% END %]> 
-      All bodies</label>
-  <label><input type="radio" name="type" value="london"
-      [% IF report_filter == 'london' %]checked[% END %]> 
-      London boroughs</label>
-  <label><input type="radio" name="type" value="city"
-      [% IF report_filter == 'city' %]checked[% END %]> 
-      Cities (unitary authorities)</label>
-  <label><input type="radio" name="type" value="dc"
-      [% IF report_filter == 'dc' %]checked[% END %]> 
-      Districts and counties</label>
+<form method="GET">
+    <div class="filters">
+        <p>
+            <label for="area">[% loc('Incidents reported in:') %]</label>
+            <select class="form-control" id="area" name="area">
+                <option value="">All areas</option>
+            </select>
+        </p>
+        <p>
+            <label for="start_date">[% loc('Start date:') %]</label>
+            <input type="date" class="form-control" id="start_date" name="start_date" value="2013-01-01">
+        </p>
+        <p>
+            <label for="end_date">[% loc('End date:') %]</label>
+            <input type="date" class="form-control" id="end_date" name="end_date" value="[% date.format(date.now, '%Y-%m-%d', 'en_GB') %]">
+        </p>
+        <p>
+            <label for="sources">[% loc('Data sources') %]</label>
+            <select class="form-control" id="sources" name="sources">
+                <option>Collideoscope &amp; STATS19</option>
+                <option>Collideoscope only</option>
+                <option>STATS19 only</option>
+            </select>
+        </p>
+        <p class="no-label">
+            <input class="btn" value="[% loc('Update') %]" type="submit">
+        </p>
+    </div>
 </form>
 
-<table cellpadding="3" cellspacing="1" border="0" class="nicetable">
-<thead>
-<tr>
-<th class="title">[% loc('Responsible body') %]</th>
-<th class="data">[% loc('Incidents<br>this week') %]</th>
-<th class="data">[% loc('Near misses<br>this week') %]</th>
-<th class="data">[% loc('Older<br>incidents') %]</th>
-<th class="data">[% loc('Older<br>near misses') %]</th>
-</tr>
-</thead>
+<div class="dashboard-row">
+    <div class="dashboard-item dashboard-item--12">
+        <p style="background: #eee; padding: 1em 1em 25% 1em; margin: 0;">Reports line graph goes here</p>
+    </div>
+</div>
 
-<tbody>
-[% FOREACH body IN bodies %]
-    <tr align="center"
-    [%- IF NOT body.areas.size %] class="gone"
-    [%- ELSIF ! (loop.count % 2) %] class="a"
-    [%- END %]>
-    <td class="title"><a href="[% body.url(c) %]">[% body.name %]</a></td>
-    <td class="data">[% new_accident.${body.id} or 0 %]</td>
-    <td class="data">[% new_miss.${body.id} or 0 %]</td>
-    <td class="data">[% ( older_accident.${body.id} || 0 ) + ( unknown_accident.${body.id} || 0 ) %]</td>
-    <td class="data">[% ( older_miss.${body.id} || 0 ) + ( unknown_miss.${body.id} || 0 ) %]</td>
-    </tr>
-    [% TRY %][% PROCESS "reports/_extras.html" %][% CATCH file %][% END %]
-[% END %]
-</tbody>
-</table>
+<div class="dashboard-row">
+    <div class="dashboard-item dashboard-item--6">
+        <h2 class="dashboard-subheading">[% loc('Download the data on this page') %]</h2>
+        <p>Grab a CSV of all the reports matching the filters you’ve set at the top of this page, suitable for analysis in in applications like Excel or Fusion Tables.</p>
+        <a href="#" class="btn">Download CSV</a>
+    </div>
+    <div class="dashboard-item dashboard-item--6">
+        <form class="dashboard-search">
+            <h2>[% loc('Show reports on a map') %]</h2>
+            <label for="body">[% loc('Pick a council or police force') %]</label>
+            <div class="dashboard-search__input">
+                <select id="body" name="body" class="js-autocomplete">
+                    <option value="">[% loc('Pick your council') %]</option>
+                    <option value="1">Borsetshire County Council</option>
+                    <option value="2">Borsetshire Police</option>
+                </select>
+            </div>
+            <div class="dashboard-search__submit">
+                <input type="submit" value="[% loc('Go') %]">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="dashboard-row">
+    <div class="dashboard-item dashboard-item--6">
+        <h2 class="dashboard-subheading">[% loc('Reports by severity') %]</h2>
+        <p style="background: #eee; padding: 1em 1em 40% 1em; margin: 0;">Bar chart of reports by severity<br>(near misses / bruises and scrapes / serious injury / fatality)</p>
+    </div>
+    <div class="dashboard-item dashboard-item--6">
+        <h2 class="dashboard-subheading">[% loc('Reports by transport mode') %]</h2>
+        <p style="background: #eee; padding: 1em 1em 40% 1em; margin: 0;">Bar chart of reports by transport mode<br>(car, motorcycle, hgv, other vehicle, bike, pedestrian, nothing)</p>
+    </div>
+</div>
 
 [% INCLUDE 'footer.html' %]
