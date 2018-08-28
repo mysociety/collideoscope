@@ -20,9 +20,9 @@ In order to import Stats19 data from scratch, you need to run through the follow
    `$> export PERL5LIB=/home/vagrant/collideoscope/perllib:$PERL5LIB`
 3. `cd` in to the collideoscope directory.
 4. Run the `stats19` script from `\bin` to download the zipfile of data:
-   `$> ../fixmystreet/bin/cron-wrapper bin/stats19 download`
+   `$> bin/stats19 download`
 5. Unzip it:
-   `$> ../fixmystreet/bin/cron-wrapper bin/stats19 unzip`
+   `$> bin/stats19 unzip`
 6.
     a) This will create a `vehicles.csv`, `casualties.csv` and `accidents.csv` in
    `data/stats19` to complement the existing collection of static data files.
@@ -33,10 +33,10 @@ In order to import Stats19 data from scratch, you need to run through the follow
 
 7. "Deploy" the data, meaning load it into the interim SQLite database from
    the collection of CSV files.
-   `$> ../fixmystreet/bin/cron-wrapper bin/stats19 deploy`
+   `$> bin/stats19 deploy`
    This will take a long time (several hours on my machine)
 8. Finally, you can import the data into your FMS database:
-   `$> ../fixmystreet/bin/cron-wrapper bin/stats19 import`
+   `$> bin/stats19 import`
    If you're running this locally, soon enough you'll trip over mapit's rate
    limiting, because the script calls MapIt for each report. You can kill the
    script at any time and use the data you've got (a few reports are probably
