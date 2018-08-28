@@ -1,4 +1,4 @@
-Subject: Problem Report: [% report.title %]
+Subject: Incident report: [% report.title %]
 
 Dear [% bodies_name %],
 
@@ -15,6 +15,10 @@ please visit the following link:
 
 Name: [% report.name %]
 
+Email: [% report.user.email OR "None provided" %]
+
+Phone: [% report.user.phone OR "None provided" %]
+
 Incident summary: [% report.title %]
  
 Details about the incident: [% report.detail %]
@@ -22,8 +26,6 @@ Details about the incident: [% report.detail %]
 Easting/Northing
 [%- " (IE)" IF coordsyst == "I" -%]
 : [% easting %]/[% northing %]
-
-Latitude: [% report.latitude %]
 
 Latitude: [% report.latitude %]
 
