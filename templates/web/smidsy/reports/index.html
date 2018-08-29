@@ -26,11 +26,11 @@
         </p>
         <p>
             <label for="start_date">[% loc('Start date:') %]</label>
-            <input type="date" class="form-control" id="start_date" name="start_date" value="2013-01-01">
+            <input type="date" class="form-control" id="start_date" name="start_date" value="[% date.format(start_date, '%Y-%m-%d', 'en_GB') %]">
         </p>
         <p>
             <label for="end_date">[% loc('End date:') %]</label>
-            <input type="date" class="form-control" id="end_date" name="end_date" value="[% date.format(date.now, '%Y-%m-%d', 'en_GB') %]">
+            <input type="date" class="form-control" id="end_date" name="end_date" value="[% date.format(end_date, '%Y-%m-%d', 'en_GB') %]">
         </p>
         <p>
             <label for="sources">[% loc('Data sources') %]</label>
@@ -48,7 +48,14 @@
 
 <div class="dashboard-row">
     <div class="dashboard-item dashboard-item--12">
-        <p style="background: #eee; padding: 1em 1em 25% 1em; margin: 0;">Reports line graph goes here</p>
+        <div class="labelled-line-chart">
+            <canvas id="chart-all-reports" width="600" height="300"
+                data-labels="[&quot;[% problem_periods.join('&quot;,&quot;') %]&quot;]"
+                data-values-reports="[[% problems_reported_by_period.join(',') %]]"
+                data-values-fixed="[[% problems_fixed_by_period.join(',') %]]"
+                ></canvas>
+            <span class="label" data-datasetindex="0"><strong style="color: #F4A140">[% tprintf(nget("%s problem reported", "%s problems reported", problems_reported_by_period.last), decode(problems_reported) _ '</strong>') %]</span>
+        </div>
     </div>
 </div>
 

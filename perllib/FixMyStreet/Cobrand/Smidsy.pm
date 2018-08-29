@@ -416,6 +416,73 @@ sub reports_hook_restrict_bodies_list {
     }
 }
 
+sub report_page_data {
+    my $self = shift;
+    my $c = $self->{c};
+
+    my $start = DateTime->new(year => 2013, month => 1, day => 1);
+    my $end = DateTime->now();
+
+    $c->stash->{start_date} = $c->get_param('start_date') || '2013-01-01';
+    $c->stash->{end_date} = $c->get_param('end_date');
+    $c->forward('/dashboard/construct_rs_filter') if $c->stash->{start_date};
+
+    if ( $c->get_param('csv') ) {
+        return 1;
+    } else {
+        $c->stash->{template} = 'reports/index.html';
+        unless ( $c->stash->{start_date} && $c->stash->{end_date} ) {
+            $c->forward('/reports/load_dashboard_data');
+            $c->stash->{problems_reported} = $c->stash->{problems_reported_by_period}->[-1];
+        } else {
+
+            $start = DateTime::Format::Strptime->new(
+                pattern => '%F', # yyyy-mm-dd
+            )->parse_datetime($c->stash->{start_date});
+            my $loop_start = $start->clone; # to avoif loop_period changing start
+
+            $end = DateTime::Format::Strptime->new(
+                pattern => '%F', # yyyy-mm-dd
+            )->parse_datetime($c->stash->{end_date});
+
+            use FixMyStreet::Script::UpdateAllReports;
+
+            my ($period, $extra);
+            if (DateTime::Duration->compare($end - $start, DateTime::Duration->new(months => 1)) < 0) {
+                $period = 'day';
+            } elsif (DateTime::Duration->compare($end - $start, DateTime::Duration->new(years => 1)) < 0) {
+                $period = 'month';
+                $extra = 'month_abbr';
+            } else {
+                $period = 'year';
+            }
+
+            my @problem_periods = FixMyStreet::Script::UpdateAllReports::loop_period($loop_start, $period, $extra);
+
+            my %problems_reported_by_period = FixMyStreet::Script::UpdateAllReports::stuff_by_day_or_year(
+                $period, $c->stash->{problems_rs},
+                state => [ FixMyStreet::DB::Result::Problem->visible_states() ],
+            );
+
+            my @problems_reported_by_period;
+            foreach (map { $_->{n} } @problem_periods) {
+                push @problems_reported_by_period, ($problems_reported_by_period[-1]||0) + ($problems_reported_by_period{$_}||0);
+            }
+
+            $c->stash->{problem_periods} = [ map { $_->{d} || $_->{n} } @problem_periods ];
+            $c->stash->{problems_reported} = $problems_reported_by_period[-1];
+            $c->stash->{problems_reported_by_period} = \@problems_reported_by_period;
+            $c->stash->{problems_fixed_by_period} = [];
+        }
+
+        $c->stash->{start_date} = DateTime::Format::Strptime->new( pattern => "%H:%M:%S %d:%m:%Y" )->format_datetime($start);
+        $c->stash->{end_date} = DateTime::Format::Strptime->new( pattern => "%H:%M:%S %d:%m:%Y" )->format_datetime($end);
+        return 1;
+    }
+
+    return 0;
+}
+
 sub send_batched {
     my $self = shift;
 
