@@ -1,7 +1,7 @@
 [%
 
 email_summary = "A new incident in your area has been reported by a " _ site_name _ " user.";
-email_footer = "If there is a more appropriate email address for messages about cycling incidents, please let us know. This will help improve the service for local people. We also welcome any other feedback you may have.";
+email_footer = "If there is a more appropriate email address for messages about cycling incidents, please let us know.";
 email_columns = 2;
 
 PROCESS '_email_settings.html';
@@ -13,7 +13,7 @@ INCLUDE '_email_top.html';
   [% start_padded_box %]
   <h1 style="[% h1_style %]">New incident in your&nbsp;area</h1>
   <p style="[% p_style %]">[% missing %][% multiple %]A user of [% site_name %] has submitted the following report
-of a cycling related incident that they believe should be brought to your attention.</p>
+of a cycling related incident that occurred witin the council district.</p>
 
   <p style="margin: 20px auto; text-align: center">
     <a style="[% button_style %]" href="[% url %]">Show full report</a>
@@ -41,7 +41,11 @@ of a cycling related incident that they believe should be brought to your attent
       </tr>
     [%~ END %]
   </table>
-  <p style="[% p_style %] margin-top: 0.5em;">Replies to this message will go directly to [% report.name | html %], the user who reported the problem.</p>
+  <p style="[% p_style %] margin-top: 0.5em;">
+  Please use this data to help inform your road safety planning. Collidescope
+  reports do not require a response, but if you would like more information, or
+  to update the user on road safety measures then just hit ‘reply’ — your
+  message will go to [% report.name | html %], the user who submitted the report.</p>
   [% end_padded_box %]
 </th>
 [% WRAPPER '_email_sidebar.html' object = report %]

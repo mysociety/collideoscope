@@ -1,6 +1,6 @@
 Subject: Confirm your incident on [% site_name %]
 
-Hi [% report.name %],
+Hello [% report.name %],
 
 Please click on the link below to confirm the incident you just
 added to [% site_name %]:
@@ -10,12 +10,19 @@ added to [% site_name %]:
 If your email program does not let you click on this link, copy and paste it
 into your web browser and press return.
 
-Your incident had the title:
+Your incident was a: [% report.title %]
 
-[% report.title %]
-
-And details:
+And you gave these details:
 
 [% report.detail %]
 
+If you no longer wish to send this report, please take no further action.
+
+Thank you for submitting a report through [% site_name %].
+
+
+
 [% signature %]
+
+This email was sent automatically, from an unmonitored email account - so
+please do not reply to it.

@@ -33,7 +33,7 @@ sub severity_categories {
     return [
         {
             value => 10,
-            name => 'Near Miss',
+            name => 'Near miss',
             code => 'miss',
             description => 'could have involved scrapes and bruises',
         },
