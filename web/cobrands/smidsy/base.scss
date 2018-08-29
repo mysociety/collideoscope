@@ -101,11 +101,12 @@ body.twothirdswidthpage {
   padding: 2em;
 
   h1, p, label, #geolocate_link {
-    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+    text-shadow: 0 1px 1px rgba(#000, 0.5), 0 0 20px #000;
   }
 
   h1 {
-    margin-top: 0;
+    line-height: 1.2;
+    margin: 0 auto 0.5em auto;
   }
 
   p {
@@ -114,7 +115,9 @@ body.twothirdswidthpage {
 
   p.lead {
     font-size: 1.5em;
-    margin-bottom: 10px;
+    line-height: 1.2;
+    margin: 0 auto 0.5em auto;
+    max-width: 24em;
   }
 
   #postcodeForm {
@@ -124,11 +127,8 @@ body.twothirdswidthpage {
 
     label {
       color: inherit;
-      margin: 0 0 0.6em 0;
-
-      html.js & {
-        display: none;
-      }
+      margin: 0.5em 0 16px 0;
+      font-size: 21px;
     }
 
     div {
@@ -136,6 +136,8 @@ body.twothirdswidthpage {
       background-color: transparent;
       @include box-shadow(0 1px 3px rgba(0,0,0,0.3));
       font-size: 21px;
+
+      @include flex-container();
 
       input#pc {
         width: 80%; // down from default 86%;
@@ -213,11 +215,10 @@ body.twothirdswidthpage {
 }
 
 .front__how-it-works,
-.front__statistics,
-.front__support {
+.front__data,
+.front__why {
   text-align: center;
   padding: 2em 0;
-  // font-size: 21px;
   color: $color-neutral-duckegg;
 
   h2 {
@@ -225,7 +226,7 @@ body.twothirdswidthpage {
     font-size: 28px; // up from the default 1.5em (24px on 16px base)
   }
 
-  h3, .front__support__cta {
+  h3 {
     margin-top: 0;
     font-size: 24px; // up from default 1.25em (20px on 16px base)
     font-weight: bold;
@@ -242,7 +243,7 @@ body.twothirdswidthpage {
 }
 
 .front__how-it-works,
-.front__support {
+.front__why {
   background-color: #fff;
 }
 
@@ -268,38 +269,38 @@ body.twothirdswidthpage {
   background-color: $color-secondary-brown;
 }
 
-.front__statistics {
+.front__data {
+  text-align: inherit;
   background-color: $color-neutral-raincloud;
-  text-shadow: 0 1px 0 mix(#fff, $color-neutral-raincloud, 70%);
-
-  strong {
-    display: block; // break onto new line
-    font-weight: normal;
-    font-family: Oswald, Impact, sans-serif;
-    font-size: 54px;
-    line-height: 62px;
-  }
+  color: mix(#000, #6b9094, 30%);
 }
 
-.front__stats19 {
-    margin-top: 2em;
-    margin-bottom: 0;
+.front__data__cta {
+  margin: 1.5em 0;
 
-    strong {
-        display: inline;
-        font-size: 1.2em;
-        line-height: 1em;
-        margin: 0 0.1em;
+  a {
+    display: inline-block;
+    border-radius: 3px;
+    background: $color-primary-orange;
+    color: #fff;
+    padding: 0.5em 1em;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+
+    &:hover {
+      background: darken($color-primary-orange, 10%);
     }
+  }
+
+  small {
+    display: block;
+    margin-top: 0.5em;
+    font-style: normal;
+  }
 }
 
-.front__support {
-  text-align: left;
-
-  & + .container > div:first-child {
-    // This is the extra div created by our tag-closing trickery.
-    display: none;
-  }
+// This is the extra div created by our tag-closing trickery.
+.container.hidden {
+  display: none;
 }
 
 .circled-icon {
@@ -315,6 +316,59 @@ body.twothirdswidthpage {
     width: 50px;
     height: 50px;
     margin-top: 25px;
+  }
+}
+
+.front__why {
+  padding-bottom: 4em;
+}
+
+.squidgy-quote {
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+  font-size: 18px;
+  line-height: 1.4;
+  text-align: left;
+  margin-top: 1em;
+
+  border: 50px solid $color-secondary-blue;
+  border-image: url("/cobrands/smidsy/images/quote-blue.svg") 100;
+  background: $color-secondary-blue;
+
+  p {
+    margin: -25px -20px;
+  }
+
+  p + p {
+    margin-top: 35px;
+  }
+
+  img {
+    display: none;
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+    border: 5px solid $color-secondary-blue;
+  }
+}
+
+.squidgy-quote--aquamarine {
+  border-color: $color-secondary-aquamarine;
+  border-image-source: url("/cobrands/smidsy/images/quote-aquamarine.svg");
+  background: $color-secondary-aquamarine;
+
+  img {
+    border-color: $color-secondary-aquamarine;
+  }
+}
+
+.squidgy-quote--olive {
+  border-color: $color-secondary-olive;
+  border-image-source: url("/cobrands/smidsy/images/quote-olive.svg");
+  background: $color-secondary-olive;
+
+  img {
+    border-color: $color-secondary-olive;
   }
 }
 
