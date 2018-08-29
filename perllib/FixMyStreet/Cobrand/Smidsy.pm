@@ -376,6 +376,11 @@ sub moderate_permission {
     return $user->id == $object->user->id;
 }
 
+sub updates_disallowed {
+    my ($self, $problem) = @_;
+    return ($self->{c}->user_exists && $self->{c}->user->id == $problem->user->id) ? 0 : 1;
+}
+
 =head1 reports_hook_restrict_bodies_list
 
 Hook called from FMS::App::Controller::Reports->index
