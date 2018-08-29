@@ -526,8 +526,26 @@ sub report_page_data {
             $c->stash->{problems_fixed_by_period} = [];
         }
 
+        my @severities = qw/miss slight serious fatal/;
+        my %reports_by_severity;
+
+        my $sev_rs = $c->stash->{problems_rs}->search({},
+            {
+                select => [ 'category', { count => 'me.id' } ],
+                as => ['category', 'total'],
+                group_by => 'category'
+            }
+        );
+
+        while ( my $r = $sev_rs->next ) {
+            (my $sev = $r->category) =~ s/^.*-//;
+            $reports_by_severity{$sev} += $r->get_column('total');
+        }
+
         $c->stash->{start_date} = DateTime::Format::Strptime->new( pattern => "%H:%M:%S %d:%m:%Y" )->format_datetime($start);
         $c->stash->{end_date} = DateTime::Format::Strptime->new( pattern => "%H:%M:%S %d:%m:%Y" )->format_datetime($end);
+        $c->stash->{severities} = \@severities;
+        $c->stash->{reports_by_severity} = \%reports_by_severity;
         return 1;
     }
 

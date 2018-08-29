@@ -86,7 +86,14 @@
 <div class="dashboard-row">
     <div class="dashboard-item dashboard-item--6">
         <h2 class="dashboard-subheading">[% loc('Reports by severity') %]</h2>
-        <p style="background: #eee; padding: 1em 1em 40% 1em; margin: 0;">Bar chart of reports by severity<br>(near misses / bruises and scrapes / serious injury / fatality)</p>
+        <table class="dashboard-ranking-table js-make-bar-chart">
+          [% FOR severity IN severities %]
+            <tr>
+                <th scope="row">[% severity %]</th>
+                <td>[% reports_by_severity.$severity OR 0 %]</td>
+            </tr>
+          [% END %]
+        </table>
     </div>
     <div class="dashboard-item dashboard-item--6">
         <h2 class="dashboard-subheading">[% loc('Reports by transport mode') %]</h2>
