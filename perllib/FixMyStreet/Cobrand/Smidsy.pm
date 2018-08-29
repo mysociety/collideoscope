@@ -428,6 +428,49 @@ sub report_page_data {
     $c->forward('/dashboard/construct_rs_filter') if $c->stash->{start_date};
 
     if ( $c->get_param('csv') ) {
+        $c->stash->{csv} = {
+            problems => $c->stash->{problems_rs}->search_rs({}, {
+                order_by => { '-desc' => 'me.confirmed' },
+            }),
+            headers => [
+                'Report ID',
+                'Title',
+                'Category',
+                'Created',
+                'Confirmed',
+                'Status',
+                'Latitude', 'Longitude',
+                'Query',
+                'Report URL',
+                'Source',
+                'Participants',
+            ],
+            columns => [
+                'id',
+                'title',
+                'category',
+                'created',
+                'confirmed',
+                'state',
+                'latitude', 'longitude',
+                'postcode',
+                'url',
+                'external_body',
+                'participants'
+            ],
+            extra_data => sub {
+                my $report = shift;
+
+                my $data = $report->get_extra_metadata;
+
+                return {
+                    external_body => $report->external_body,
+                    participants => $data->{participants} || '',
+                };
+            },
+            filename => 'collideoscope-data',
+        };
+        $self->generate_csv;
         return 1;
     } else {
         $c->stash->{template} = 'reports/index.html';
@@ -482,6 +525,83 @@ sub report_page_data {
 
     return 0;
 }
+
+sub generate_csv {
+    my $self = shift;
+    my $c = $self->{c};
+
+    my $csv = Text::CSV->new({ binary => 1, eol => "\n" });
+    $csv->combine(@{$c->stash->{csv}->{headers}});
+    my @body = ($csv->string);
+
+    my $fixed_states = FixMyStreet::DB::Result::Problem->fixed_states;
+    my $closed_states = FixMyStreet::DB::Result::Problem->closed_states;
+
+    my %asked_for = map { $_ => 1 } @{$c->stash->{csv}->{columns}};
+
+    my $problems = $c->stash->{csv}->{problems};
+    while ( my $report = $problems->next ) {
+        my $hashref = $report->as_hashref($c, \%asked_for);
+
+        if ($asked_for{wards}) {
+            $hashref->{wards} = join ', ',
+              map { $c->stash->{children}->{$_}->{name} }
+              grep {$c->stash->{children}->{$_} }
+              split ',', $hashref->{areas};
+        }
+
+        ($hashref->{local_coords_x}, $hashref->{local_coords_y}) =
+            $report->local_coords;
+        $hashref->{url} = join '', $c->cobrand->base_url_for_report($report), $report->url;
+
+        if (my $fn = $c->stash->{csv}->{extra_data}) {
+            my $extra = $fn->($report, $hashref);
+            $hashref = { %$hashref, %$extra };
+        }
+
+        $csv->combine(
+            @{$hashref}{
+                @{$c->stash->{csv}->{columns}}
+            },
+        );
+
+        push @body, $csv->string;
+    }
+
+    my $filename = $c->stash->{csv}->{filename};
+    $c->res->content_type('text/csv; charset=utf-8');
+    $c->res->header('content-disposition' => "attachment; filename=${filename}.csv");
+    $c->res->body( join "", @body );
+}
+
+sub dashboard_export_add_columns {
+    my $self = shift;
+    my $c = $self->{c};
+
+    $c->stash->{csv}->headers = [
+        @{ $c->stash->{csv}->{headers} },
+        "Source",
+        "Participants",
+    ];
+
+    $c->stash->{csv}->{columns} = [
+        @{ $c->stash->{csv}->{columns} },
+        "source",
+        "participants",
+    ];
+    $c->stash->{csv}->{extra_data} = sub {
+        my $report = shift;
+
+        my $participants = $report->get_extra_metadata('participants') || '';
+        my $source = $report->get_extra_metadata('source') || '';
+
+        return {
+            participants => $participants,
+            source => $source,
+        };
+    };
+}
+
 
 sub send_batched {
     my $self = shift;
