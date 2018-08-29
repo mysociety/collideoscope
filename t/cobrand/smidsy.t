@@ -34,7 +34,7 @@ FixMyStreet::override_config {
     # Note that the following requires the steps to run translations
     #   cd bin && ./make_po FixMyStreet-Smidsy && cd ..
     #   commonlib/bin/gettext-makemo --quiet FixMyStreet
-    $mech->content_contains( 'Reporting an incident', 'Localisation has worked ok' );
+    $mech->content_contains( 'Adding an incident', 'Localisation has worked ok' );
 
     $mech->content_contains( 'Section 170 of the Road Traffic' );
 
