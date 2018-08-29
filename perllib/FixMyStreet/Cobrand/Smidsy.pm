@@ -427,6 +427,14 @@ sub report_page_data {
     $c->stash->{end_date} = $c->get_param('end_date');
     $c->forward('/dashboard/construct_rs_filter') if $c->stash->{start_date};
 
+    if ( my $source = $c->get_param('sources' ) ) {
+        my $rs = $c->stash->{problems_rs};
+        if ( $source ne 'stats19' ) {
+            $source = undef;
+        }
+        $c->stash->{problems_rs} = $rs->search( { external_body => $source } );
+    }
+
     if ( $c->get_param('csv') ) {
         $c->stash->{csv} = {
             problems => $c->stash->{problems_rs}->search_rs({}, {

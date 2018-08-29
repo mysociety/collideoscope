@@ -35,9 +35,9 @@
         <p>
             <label for="sources">[% loc('Data sources') %]</label>
             <select class="form-control" id="sources" name="sources">
-                <option>Collideoscope &amp; STATS19</option>
-                <option>Collideoscope only</option>
-                <option>STATS19 only</option>
+                <option value="">Collideoscope &amp; STATS19</option>
+                <option value="collideoscope"[% ' selected' IF sources == 'collideoscope' %]>Collideoscope only</option>
+                <option value="stats19"[% ' selected' IF sources == 'stats19' %]>STATS19 only</option>
             </select>
         </p>
         <p class="no-label">
