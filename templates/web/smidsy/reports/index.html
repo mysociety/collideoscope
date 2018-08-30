@@ -72,8 +72,11 @@
             <div class="dashboard-search__input">
                 <select id="body" name="body" class="js-autocomplete">
                     <option value="">[% loc('Pick your council') %]</option>
-                    <option value="1">Borsetshire County Council</option>
-                    <option value="2">Borsetshire Police</option>
+                    [% FOR b IN bodies # Not body as 'body' may be on stash %]
+                    <option value="[% b.id %]">[% b.name | html ~%]
+                        [% IF NOT b.get_column("area_count") %] [% loc('(no longer exists)') %][% END ~%]
+                    </option>
+                    [% END %]
                 </select>
             </div>
             <div class="dashboard-search__submit">

@@ -420,6 +420,15 @@ sub report_page_data {
     my $self = shift;
     my $c = $self->{c};
 
+    if (my $body = $c->get_param('body')) {
+        $body = $c->model('DB::Body')->find( { id => $body } );
+        if ($body) {
+            $body = $c->cobrand->short_name($body);
+            $c->res->redirect("/reports/$body");
+            $c->detach;
+        }
+    }
+
     my $start = DateTime->new(year => 2013, month => 1, day => 1);
     my $end = DateTime->now();
 
@@ -541,6 +550,10 @@ sub report_page_data {
             (my $sev = $r->category) =~ s/^.*-//;
             $reports_by_severity{$sev} += $r->get_column('total');
         }
+
+        my @bodies = $c->model('DB::Body')->active->translated->with_area_count->all_sorted;
+        @bodies = @{$c->cobrand->call_hook('reports_hook_restrict_bodies_list', \@bodies) || \@bodies };
+        $c->stash->{bodies} = \@bodies;
 
         $c->stash->{start_date} = DateTime::Format::Strptime->new( pattern => "%H:%M:%S %d:%m:%Y" )->format_datetime($start);
         $c->stash->{end_date} = DateTime::Format::Strptime->new( pattern => "%H:%M:%S %d:%m:%Y" )->format_datetime($end);
