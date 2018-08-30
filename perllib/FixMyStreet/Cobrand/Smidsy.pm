@@ -444,6 +444,12 @@ sub report_page_data {
         $c->stash->{problems_rs} = $rs->search( { external_body => $source } );
     }
 
+    if ( my $area = $c->get_param('area') ) {
+        $c->stash->{area} = $area;
+        my $rs = $c->stash->{problems_rs};
+        $c->stash->{problems_rs} = $rs->search( { bodies_str => $area } );
+    }
+
     if ( $c->get_param('csv') ) {
         $c->stash->{csv} = {
             problems => $c->stash->{problems_rs}->search_rs({}, {

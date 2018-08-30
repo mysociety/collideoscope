@@ -22,6 +22,11 @@
             <label for="area">[% loc('Incidents reported in:') %]</label>
             <select class="form-control" id="area" name="area">
                 <option value="">All areas</option>
+                [% FOR b IN bodies # Not body as 'body' may be on stash %]
+                <option value="[% b.id %]"[% ' selected' IF b.id == area %]>[% b.name | html ~%]
+                    [% IF NOT b.get_column("area_count") %] [% loc('(no longer exists)') %][% END ~%]
+                </option>
+                [% END %]
             </select>
         </p>
         <p>
