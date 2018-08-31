@@ -22,6 +22,8 @@ use constant STATS19_IMPORT_USER => 'hakim+smidsy@mysociety.org';
 use constant EARLIEST_STATS19_UPDATE => 2013; # TODO, constant for now
 use constant LATEST_STATS19_UPDATE => 2016; # TODO, constant for now
 
+sub allow_photo_upload { 0 }
+
 sub enter_postcode_text {
     my ( $self ) = @_;
     return _('Street, area, or landmark');
@@ -160,19 +162,6 @@ sub report_form_extras {
             },
         },
         {
-            name => 'emergency_services',
-            validator => sub {
-                my $data = shift;
-                die "Invalid option!\n"
-                    unless {
-                        "yes" => 1,
-                        "no" => 1,
-                        "unsure" => 1,
-                    }->{ $data };
-                return $data;
-            },
-        },
-        {
             name => 'road_type',
             validator => sub {
                 my $data = shift;
@@ -187,26 +176,8 @@ sub report_form_extras {
             },
         },
         {
-            name => 'registration',
-            validator => sub {
-                # ok not to pass one, just accept anything for now
-                return shift;
-            },
-        },
-        {
             name => 'injury_detail',
             validator => sub { shift } # accept as is
-        },
-        {
-            name => 'media_url',
-            validator => sub {
-                my $data = shift
-                    or return '';
-                # die "Please enter a valid URL\n" if $data =~ ... # TODO
-                $data = 'http://' . $data
-                    unless $data =~ m{://};
-                return $data;
-            },
         },
     )
 }
@@ -266,27 +237,6 @@ sub report_new_munge_before_insert {
     }
 
     $report->title($title);
-}
-
-sub get_embed_code {
-    my ($self, $problem) = @_;
-
-    my $media_url = $problem->extra->{media_url}
-        or return;
-
-    my $uri = URI->new( $media_url );
-
-    if ($uri->host =~ /youtube.com$/) {
-        my $v = $uri->query_param('v') or return;
-        return { service => 'youtube', id => $v };
-    }
-
-    if ($uri->host =~ /vimeo.com$/) {
-        my ($v) = $uri->path =~ m{^/(\w+)};
-        return { service => 'vimeo', id => $v };
-    }
-
-    return;
 }
 
 sub prettify_incident_dt {
@@ -419,6 +369,11 @@ sub dashboard_categorize_problem {
 sub is_stats19 {
     my ($self, $problem) = @_;
     return $problem->name eq 'Stats19 import';
+}
+
+sub moderate_permission {
+    my ($self, $user, $type, $object) = @_;
+    return $user->id == $object->user->id;
 }
 
 =head1 reports_hook_restrict_bodies_list

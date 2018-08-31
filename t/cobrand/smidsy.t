@@ -65,8 +65,6 @@ FixMyStreet::override_config {
         $mech->content_contains( 'When did it happen?' );
         $mech->content_contains( 'Where did it happen?' );
         $mech->content_contains( 'The incident involved a bike and' );
-        $mech->content_contains( 'What was the vehicle’s registration number?' );
-        $mech->content_contains( 'Did the emergency services attend?' );
         $mech->content_contains( 'Can you describe what happened?' );
     };
 
@@ -84,10 +82,7 @@ FixMyStreet::override_config {
                 incident_time => '14:50',
                 road_type => 'road',
                 participants => 'car',
-                registration => 'ABC DEF',
-                emergency_services => 'yes',
                 detail => 'Hit by red car',
-                media_url => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
             },
         });
 
@@ -108,8 +103,6 @@ FixMyStreet::override_config {
         $mech->content_contains( '(incident occurred: 14:50' );
         $mech->content_contains( 'Details about injuries: Broken shoulder');
         $mech->content_contains( 'Serious ( incident involved serious injury or hospitalisation )' );
-        $mech->content_contains( 'Media URL' );
-        $mech->content_contains( '<iframe width="320" height="195" src="//www.youtube.com/embed/dQw4w9WgXcQ"' );
         $mech->content_contains( '<img border="0" src="/cobrands/smidsy/images/pin-vehicle-serious.png"' );
         $mech->content_contains( 'data-map_type="OpenLayers.Layer.Stamen"' );
     };

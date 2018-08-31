@@ -48,16 +48,6 @@ $(function() {
         }
     }).change(); // and call on page load
 
-    $('#form_participants').on('change', function(){
-        // In a stroke of genius, jQuery returns true for the :selected selector,
-        // if *any* of the matched elements are :selected, rather than *all* of them.
-        if( $('option[value="car"], option[value="motorcycle"], option[value="hgv"], option[value="other"]').is(':selected') ) {
-            $('.vehicle-registration-number').slideDown();
-        } else {
-            $('.vehicle-registration-number').slideUp();
-        }
-    }).change(); // and call on page load
-
     var type = $('form.statistics-filter input[name=type]');
     type.on('change', function () {
         var val = $(this).val();
