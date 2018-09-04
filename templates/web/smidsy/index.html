@@ -1,6 +1,9 @@
 [% pre_container_extra = PROCESS 'around/postcode_form.html' %]
 [% SET bodyclass = 'frontpage fullwidthpage' %]
 [% INCLUDE 'header.html', title = '' %]
+[% extra_js = [
+    version('/cobrands/smidsy/js/front-page.js'),
+] -%]
 
 [% IF error %]
     <p class="form-error">[% error %]</p>
@@ -8,6 +11,22 @@
 
     </div><!-- close .content role=main -->
   </div><!-- close .container -->
+
+  <div id="front__report-now">
+      <a class="btn--geolocate" id="report_now" type="button">Report Here</a>
+      <form action="/import" method="POST" id="front__report-now-form">
+          <input type="hidden" name="web" value="1">
+          <input id="report-now-latitude" type="hidden" name="lat">
+          <input id="report-now-longitude" type="hidden" name="lon">
+          <input type="hidden" name="subject" value="report now">
+          <input type="hidden" name="service" value="front-button">
+          <label for="form_name">Name</label>
+          <input id="form_name" type="text" name="name" class="form-control required" required>
+          <label for="form_email">Email</label>
+          <input id="form_email" type="email" name="email" class="form-control required" required>
+          <input id="form_submit" type="submit" value="Save for later">
+      </form>
+  </div>
 
   <div class="front__how-it-works">
     <div class="container">

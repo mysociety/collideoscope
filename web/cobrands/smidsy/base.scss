@@ -227,6 +227,16 @@ body.twothirdswidthpage {
   }
 }
 
+#front__report-now {
+    form#front__report-now-form {
+      display: none;
+    }
+
+    .invalid {
+      border: 1px solid red;
+    }
+}
+
 .front__how-it-works,
 .front__data {
   text-align: center;
