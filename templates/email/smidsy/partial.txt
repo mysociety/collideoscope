@@ -1,0 +1,37 @@
+Subject: Complete your report on [% site_name %]
+
+Hello [% report.name || report.email %],
+
+Thanks for beginning a report on [% site_name %]. We know it can be stressful
+dealing with the aftermath of a cycling collision or near-miss, so here’s a
+quick run down of what you should do next, in your own time:
+
+1. Complete your report on [% site_name %] using this link:
+
+   [% token_url %]
+
+   Your report will be sent to the local council, who will often use it when
+   planning infrastructure changes and eductional programmes. Plus it’ll become
+   part of the public [% site_name %] incident dataset, used by planners and
+   campaigners around the UK.
+
+2. If your incident involved a motor vehicle and any sort of injury or damage
+   to property, you should also report it to the Police, using the link we’ll
+   send to you, once you’ve completed your [% site_name %] report.
+
+   Hopefully the driver of the vehicle will already have reported the incident,
+   but if they haven’t, your report will help the Police investigate a possible
+   offence under Section 170 of the Road Traffic Act.
+
+By reporting collisions and near-misses like yours, you’re helping us build the
+evidence base for cycle safety improvements, together. Completing your report
+will only take a few minutes, but will contribute a huge amount to our cause:
+
+   [% token_url %]
+
+Thank you,
+
+[% signature %]
+
+This email was sent automatically, from an unmonitored email account - so
+please do not reply to it.
