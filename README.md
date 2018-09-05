@@ -69,3 +69,8 @@ Running this site as part of a FixMyStreet vagrant install
        script/update
 
 5. Then start your FixMyStreet server process as usual. Collideoscope will be available at the `smidsy.<whatever>` subdomain of whatever local development domain you use, eg: `smidsy.127.0.0.1.xip.io:3000`.
+
+6. If you want to populate your database with some dummy data, run the fixture script from inside the VM:
+
+       cd /home/vagrant/fixmystreet
+       ../collideoscope/bin/fixture --empty --commit
