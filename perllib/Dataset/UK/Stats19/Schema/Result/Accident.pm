@@ -272,4 +272,30 @@ sub grouped_participants {
     );
 }
 
+sub most_significant_participant {
+    my $self = shift;
+    my %priority = (
+        bicycle => 0,
+        pedestrian => 1,
+        motorbike => 2,
+        car => 3,
+        taxi => 3,
+        vehicle => 3,
+        minibus => 4,
+        van => 4,
+        horse => 4,
+        hgv => 5,
+        bus => 5,
+        tram => 5,
+    );
+
+    my @ordered = (
+        sort { $priority{$a} <=> $priority{$b} }
+        map { $_->[0] eq 'Pedestrian' ? 'pedestrian' : $_->[2]->vehicle_type->group }
+        $self->participants
+    );
+
+    return $ordered[-1];
+}
+
 1;

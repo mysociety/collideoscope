@@ -100,6 +100,7 @@ sub execute {
         };
 
         my $extra = {
+            participants => $accident->most_significant_participant,
             road_type => _get_road_1_string($accident),
             severity => _get_severity_percent(_get_label($accident->accident_severity)),
             incident_date => $accident->date->strftime('%Y-%m-%d'),
