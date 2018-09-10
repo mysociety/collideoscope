@@ -405,6 +405,11 @@ sub moderate_permission {
     return $user->id == $object->user->id;
 }
 
+sub moderate_permission_title {
+    my ($self, $user, $object) = @_;
+    return 0;
+}
+
 sub updates_disallowed {
     my ($self, $problem) = @_;
     return ($self->{c}->user_exists && $self->{c}->user->id == $problem->user->id) ? 0 : 1;
