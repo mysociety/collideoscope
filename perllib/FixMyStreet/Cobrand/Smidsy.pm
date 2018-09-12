@@ -299,8 +299,10 @@ sub prettify_incident_dt {
     };
 }
 
-sub send_questionnaires {
-    return 0;
+sub send_questionnaire {
+    my ($self, $report) = @_;
+
+    return $self->show_police_info($report);
 }
 
 sub report_age { undef }
