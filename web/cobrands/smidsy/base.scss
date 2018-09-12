@@ -323,55 +323,6 @@ body.twothirdswidthpage {
   padding-bottom: 4em;
 }
 
-.squidgy-quote {
-  color: #fff;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-  font-size: 18px;
-  line-height: 1.4;
-  text-align: left;
-  margin-top: 1em;
-
-  border: 50px solid $color-secondary-blue;
-  border-image: url("/cobrands/smidsy/images/quote-blue.svg") 100;
-  background: $color-secondary-blue;
-
-  p {
-    margin: -25px -20px;
-  }
-
-  p + p {
-    margin-top: 35px;
-  }
-
-  img {
-    display: none;
-    width: 80px;
-    height: 80px;
-    border-radius: 50px;
-    border: 5px solid $color-secondary-blue;
-  }
-}
-
-.squidgy-quote--aquamarine {
-  border-color: $color-secondary-aquamarine;
-  border-image-source: url("/cobrands/smidsy/images/quote-aquamarine.svg");
-  background: $color-secondary-aquamarine;
-
-  img {
-    border-color: $color-secondary-aquamarine;
-  }
-}
-
-.squidgy-quote--olive {
-  border-color: $color-secondary-olive;
-  border-image-source: url("/cobrands/smidsy/images/quote-olive.svg");
-  background: $color-secondary-olive;
-
-  img {
-    border-color: $color-secondary-olive;
-  }
-}
-
 .smidsy-two-column,
 .smidsy-four-column {
   margin: 0 0 -1em 0;
