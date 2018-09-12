@@ -5,7 +5,7 @@ $color-primary-blue: #42A7DB;
 $color-neutral-cream: #FCF1C6;
 $color-neutral-raincloud: #DCE7E8;
 $color-neutral-duckegg: #6b9094;
-$color-neutral-slategrey: #5D696A;
+$color-neutral-slategrey: #5D696A; // matches the bottom fade on background-1280x854.jpg
 $color-secondary-blue: #99CED4;
 $color-secondary-aquamarine: #A6D0AE;
 $color-secondary-olive: #AAB674;
@@ -30,9 +30,7 @@ $base_bg: $color-neutral-slategrey;
 $base_fg: #000;
 
 // Background colour of navbar/header above full-screen map.
-// Similar to the semi-transparent grey from map controls in core sprite.png
-// Same opacity (0.9) as body.mappage .content
-$map_nav_bg: rgba(40, 40, 40, 0.9);
+$map_nav_bg: rgba(#000, 0.4);
 
 // Nav link color.
 $nav_fg: #fff;

@@ -28,7 +28,7 @@ sub allow_photo_upload { 0 }
 
 sub enter_postcode_text {
     my ( $self ) = @_;
-    return _('Street, area, or landmark');
+    return _('Enter a street, area, or landmark');
 }
 
 sub report_sent_confirmation_email { 1 }

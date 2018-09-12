@@ -6,7 +6,7 @@
   border-top-color: #fff;
   .frontpage & {
     background: none;
-    height: 8em;
+    height: 7em;
   }
 }
 
@@ -294,7 +294,6 @@ body.twothirdswidthpage {
 
   h1 {
     font-size: 38px;
-    margin-bottom: 10px;
   }
 
   p.lead {
@@ -340,13 +339,13 @@ body.twothirdswidthpage {
 }
 
 .front__how-it-works,
-.front__statistics,
-.front__support {
-
+.front__data {
   h2 {
     font-size: 32px;
   }
+}
 
+.front__how-it-works {
   p, ul {
     font-size: 20px;
     line-height: 28px;
@@ -361,23 +360,20 @@ body.twothirdswidthpage {
   }
 }
 
-.front__statistics {
-  strong {
-    font-size: 64px;
-    line-height: 64px;
-    margin-bottom: 10px;
+.front__data {
+  border-top: 1px solid $color-neutral-raincloud;
+  border-bottom: 1px solid $color-neutral-raincloud;
+  background-image: linear-gradient(90deg, $color-neutral-raincloud 60%, transparent 80%), url("/cobrands/smidsy/images/map.jpg");
+  background-position: 100% 50%;
+  background-repeat: no-repeat;
+
+  h2 {
+    margin-top: 0.4em;
   }
-}
 
-.front__stats19 {
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-
-    strong {
-        font-size: 1.2em;
-        line-height: 1em;
-        margin: 0 0.1em;
-    }
+  p {
+    max-width: 60%;
+  }
 }
 
 .smidsy-two-column,
