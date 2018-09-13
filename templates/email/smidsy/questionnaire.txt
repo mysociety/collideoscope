@@ -1,0 +1,23 @@
+Subject: Questionnaire about your [% site_name %] incident
+
+Hello [% report.name %],
+
+[% created %] ago, you told us about an incident using [% site_name %].
+
+The details of that report are at the end of this email.
+
+It would be really helpful if you could let us know what’s happened since then
+by filling in our short questionnaire:
+
+    https://www.surveygizmo.com/s3/4572371/collideoscope?id=[% report.id %]
+
+[% signature %]
+
+Your report was as follows:
+
+[% report.title %]
+
+[% report.detail %]
+
+This email was sent automatically, from an unmonitored email account - so
+please do not reply to it.

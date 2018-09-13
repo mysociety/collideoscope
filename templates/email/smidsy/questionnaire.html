@@ -1,0 +1,29 @@
+[%
+
+title = report.title | html;
+email_summary = "Got a minute spare? Let us know about your " _ site_name _ " ${ title }.";
+email_columns = 2;
+
+PROCESS '_email_settings.html';
+
+INCLUDE '_email_top.html';
+
+%]
+
+<th style="[% td_style %][% primary_column_style %]" id="primary_column">
+  [% start_padded_box %]
+  <h1 style="[% h1_style %]">Incident questionnaire</h1>
+  <p style="[% p_style %]">[% created %] ago, you told us about an incident using [% site_name %].</p>
+  <p style="[% p_style %]">It would be really helpful if you could let us know what’s happened since then.</p>
+  <p style="margin: 20px auto; text-align: center">
+    <a style="[% button_style %]" href="https://www.surveygizmo.com/s3/4572371/collideoscope?id=[% report.id %]">Fill in questionnaire</a>
+  </p>
+  <p style="[% p_style %]">Thank you! Your feedback is really valuable.</p>
+  [% end_padded_box %]
+</th>
+[% WRAPPER '_email_sidebar.html' object = report, url = url %]
+    <h2 style="[% h2_style %]">[% title %]</h2>
+    <p style="[% secondary_p_style %]">[% report.detail | html %]</p>
+[% END %]
+
+[% INCLUDE '_email_bottom.html' %]
