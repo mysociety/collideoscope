@@ -259,6 +259,13 @@ body.mappage {
   }
 }
 
+#update_form {
+  // "Updates are not sent to highways dept" message at top of Update form
+  & > .general-notes {
+    font-size: 1em; // up from 0.75em;
+  }
+}
+
 body.twothirdswidthpage {
   .container {
     .content {
