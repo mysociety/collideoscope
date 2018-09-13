@@ -378,23 +378,28 @@ body.twothirdswidthpage {
   }
 }
 
-.statistics-filter {
-  border-top: 1px solid #ddd;
-  padding-top: 1em;
-  padding-bottom: 1em;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 1em;
+.dashboard-header {
+  background-color: $color-primary-orange;
 
-  label {
-    display: block;
-    font-weight: inherit;
-    margin-top: 0.5em;
+  p {
+    margin: 0.8em 0 0 0;
   }
+}
 
-  input {
-    margin-left: 1em;
-    margin-right: 0.3em;
+.filters {
+  background-color: mix(#fff, $color-primary-orange, 60%);
+
+  p {
+    font-size: 0.8em;
+
+    @media (min-width: 48em) {
+      padding: 0 16px;
+    }
   }
+}
+
+.dashboard-search {
+  background-color: $color-primary-orange;
 }
 
 // Highlight FAQ sections when they are the target of the URL hash fragment

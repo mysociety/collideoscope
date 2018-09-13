@@ -459,6 +459,241 @@ sub reports_hook_restrict_bodies_list {
     }
 }
 
+sub get_body_children {
+    my ($self, $body) = @_;
+
+    $body = $self->{c}->model('DB::Body')->find( { id => $body } );
+    my $children = $body->first_area_children;
+    $self->{c}->stash->{area_body_name} = $body->name;
+    return [ values %$children ];
+}
+
+sub report_page_data {
+    my $self = shift;
+    my $c = $self->{c};
+
+    $c->forward('/reports/display_body_stats');
+
+    my $start = DateTime->new(year => 2013, month => 1, day => 1);
+    my $end = DateTime->now();
+
+    $c->stash->{start_date} = $c->get_param('start_date') || '2013-01-01';
+    $c->stash->{end_date} = $c->get_param('end_date');
+    $c->forward('/dashboard/construct_rs_filter') if $c->stash->{start_date};
+
+    if ( my $source = $c->get_param('sources' ) ) {
+        my $rs = $c->stash->{problems_rs};
+        if ( $source ne 'stats19' ) {
+            $source = undef;
+        }
+        $c->stash->{problems_rs} = $rs->search( { external_body => $source } );
+    }
+
+    my %participants = (
+        bicycle => 'Bicycle',
+        bus => 'Bus',
+        car => 'Car',
+        hgv => 'HGV',
+        horse => 'Horse',
+        minibus => 'Minibus',
+        motorcycle => 'Motorcycle',
+        pedestrian => 'Pedestrian',
+        taxi => 'Taxi',
+        tram => 'Tram',
+        van => 'Van',
+    );
+
+    $c->stash->{participant_labels} = \%participants;
+
+    if ( my $transport = $c->get_param('transport') ) {
+        if ( $participants{$transport} ) {
+            $c->stash->{transport} = $transport;
+            my $rs = $c->stash->{problems_rs};
+            my $filter = "%T12:participants,T\\d+:$transport,%";
+            $c->stash->{problems_rs} = $rs->search( { extra => \[ 'SIMILAR to ?', [ {} => $filter ] ] } );
+        }
+    }
+
+    if ( my $area = $c->get_param('area') ) {
+        $c->stash->{area} = $area;
+        my $rs = $c->stash->{problems_rs};
+        if (my $body = $c->get_param('area_body') and $area ne 'wards') {
+            $c->stash->{area_body} = $body;
+            $c->stash->{problems_rs} = $rs->search( areas => { 'like', '%,' . $area . ',%' } );
+            $c->stash->{children} = $self->get_body_children( $body );
+        } else {
+            $area = $c->get_param('area_body') if $area eq 'wards';
+            $c->stash->{area_body} = $area;
+            $c->stash->{problems_rs} = $rs->search( { bodies_str => $area } );
+            $c->stash->{children} = $self->get_body_children( $area );
+        }
+    }
+
+    if ( $c->get_param('csv') ) {
+        $self->download_csv($c);
+    } else {
+        $self->generate_graph_data($c, $start, $end);
+    }
+
+    return 1;
+}
+
+sub download_csv {
+    my ( $self, $c ) = @_;
+
+    $c->stash->{csv} = {
+        problems => $c->stash->{problems_rs}->search_rs({}, {
+            order_by => { '-desc' => 'me.confirmed' },
+        }),
+        headers => [
+            'Report ID',
+            'Title',
+            'Category',
+            'Created',
+            'Confirmed',
+            'Status',
+            'Latitude', 'Longitude',
+            'Query',
+            'Report URL',
+            'Source',
+            'Participants',
+        ],
+        columns => [
+            'id',
+            'title',
+            'category',
+            'created',
+            'confirmed',
+            'state',
+            'latitude', 'longitude',
+            'postcode',
+            'url',
+            'external_body',
+            'participants'
+        ],
+        extra_data => sub {
+            my $report = shift;
+
+            my $data = $report->get_extra_metadata;
+
+            return {
+                external_body => $report->external_body,
+                participants => $data->{participants} || '',
+            };
+        },
+        filename => 'collideoscope-data',
+    };
+    $c->forward('/dashboard/generate_csv');
+}
+
+sub generate_graph_data {
+    my ( $self, $c, $start, $end ) = @_;
+
+    $c->stash->{template} = 'reports/index.html';
+    unless ( $c->stash->{start_date} && $c->stash->{end_date} ) {
+        $c->forward('/reports/load_dashboard_data');
+    } else {
+
+        $start = DateTime::Format::Strptime->new(
+            pattern => '%F', # yyyy-mm-dd
+        )->parse_datetime($c->stash->{start_date});
+        my $loop_start = $start->clone; # to avoid loop_period changing start
+
+        $end = DateTime::Format::Strptime->new(
+            pattern => '%F', # yyyy-mm-dd
+        )->parse_datetime($c->stash->{end_date});
+
+        use FixMyStreet::Script::UpdateAllReports;
+
+        my ($period, $extra) = FixMyStreet::Script::UpdateAllReports::get_period_group($start, $end);
+
+        my @problem_periods = FixMyStreet::Script::UpdateAllReports::loop_period($loop_start, $extra, $period, $end->clone);
+
+        my %problems_reported_by_period = FixMyStreet::Script::UpdateAllReports::stuff_by_day_or_year(
+            $period, $c->stash->{problems_rs},
+            state => [ FixMyStreet::DB::Result::Problem->visible_states() ],
+        );
+
+        my @problems_reported_by_period;
+        foreach (map { $_->{n} } @problem_periods) {
+            push @problems_reported_by_period, ($problems_reported_by_period[-1]||0) + ($problems_reported_by_period{$_}||0);
+        }
+
+        $c->stash->{problem_periods} = [ map { $_->{d} || $_->{n} } @problem_periods ];
+        $c->stash->{problems_reported_by_period} = \@problems_reported_by_period;
+        $c->stash->{problems_fixed_by_period} = [];
+    }
+
+    my @severities = qw/miss slight serious fatal/;
+    my %reports_by_severity;
+
+    my $sev_rs = $c->stash->{problems_rs}->search({},
+        {
+            select => [ 'category', { count => 'me.id' } ],
+            as => ['category', 'total'],
+            group_by => 'category'
+        }
+    );
+
+    while ( my $r = $sev_rs->next ) {
+        (my $sev = $r->category) =~ s/^.*-//;
+        $reports_by_severity{$sev} += $r->get_column('total');
+    }
+
+    my $participants_rs = $c->stash->{problems_rs}->search({},
+        {
+            select => [ \"substring(me.extra from 'T12:participants,T\\d+:([^,]*),') as participants", { count => 'me.id' } ],
+            as => ['participants', 'total'],
+            group_by => 'participants'
+        }
+    );
+    my %reports_by_participants;
+    while ( my $participants = $participants_rs->next ) {
+        my $p = $participants->get_column('participants') || 'unknown';
+        $reports_by_participants{$p} += $participants->get_column('total');
+    }
+
+    my @bodies = $c->model('DB::Body')->active->translated->with_area_count->all_sorted;
+    @bodies = @{$c->cobrand->call_hook('reports_hook_restrict_bodies_list', \@bodies) || \@bodies };
+    $c->stash->{bodies} = \@bodies;
+
+    $c->stash->{start_date} = DateTime::Format::Strptime->new( pattern => "%H:%M:%S %d:%m:%Y" )->format_datetime($start);
+    $c->stash->{end_date} = DateTime::Format::Strptime->new( pattern => "%H:%M:%S %d:%m:%Y" )->format_datetime($end);
+    $c->stash->{severities} = \@severities;
+    $c->stash->{reports_by_severity} = \%reports_by_severity;
+    $c->stash->{participants} = [ sort keys %reports_by_participants ];
+    $c->stash->{reports_by_participants} = \%reports_by_participants;
+}
+
+sub dashboard_export_add_columns {
+    my $self = shift;
+    my $c = $self->{c};
+
+    $c->stash->{csv}->headers = [
+        @{ $c->stash->{csv}->{headers} },
+        "Source",
+        "Participants",
+    ];
+
+    $c->stash->{csv}->{columns} = [
+        @{ $c->stash->{csv}->{columns} },
+        "source",
+        "participants",
+    ];
+    $c->stash->{csv}->{extra_data} = sub {
+        my $report = shift;
+
+        my $participants = $report->get_extra_metadata('participants') || '';
+        my $source = $report->get_extra_metadata('source') || '';
+
+        return {
+            participants => $participants,
+            source => $source,
+        };
+    };
+}
+
+
 sub send_batched {
     my $self = shift;
 
