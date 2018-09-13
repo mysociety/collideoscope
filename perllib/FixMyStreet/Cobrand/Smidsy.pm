@@ -68,6 +68,13 @@ sub get_severity {
         reverse @{ $self->severity_categories };
 }
 
+sub show_police_info {
+    my ($self, $report) = @_;
+    my $severity = $report->get_extra_metadata('severity');
+    my $participants = $report->get_extra_metadata('participants');
+    return $severity > 10 && $participants =~ /(car|motorcycle|hgv|other)/;
+}
+
 sub get_police_info {
     my ($self, $report) = @_;
 
@@ -292,8 +299,10 @@ sub prettify_incident_dt {
     };
 }
 
-sub send_questionnaires {
-    return 0;
+sub send_questionnaire {
+    my ($self, $report) = @_;
+
+    return $self->show_police_info($report);
 }
 
 sub report_age { undef }

@@ -25,7 +25,7 @@ INCLUDE '_email_top.html';
 
   <h2 style="[% h2_style %]">Next steps</h2>
 
-  [% IF report.extra.severity > 10 %]
+  [% IF cobrand.show_police_info(report) %]
     [% police = cobrand.get_police_info(report) %]
     <p style="[% p_style %]"> - We recommend reporting this to the police
     [%~ IF police %] – <a href="[% police.url %]">report to [% police.name %]</a>

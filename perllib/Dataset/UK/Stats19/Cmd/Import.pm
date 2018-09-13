@@ -136,6 +136,7 @@ sub execute {
                 lastupdate   => $accident->date,
                 whensent     => $accident->date, # prevent imported stats19 data from getting sent again
                 extra        => $extra,
+                send_questionnaire => 'f',
             });
         say sprintf 'Created Problem #%d', $problem->id;
     }

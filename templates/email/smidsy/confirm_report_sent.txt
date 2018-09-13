@@ -13,7 +13,7 @@ can respond to them directly.
 
 Next steps:
 
-[% IF report.extra.severity > 10;
+[% IF cobrand.show_police_info(report) %]
     police = cobrand.get_police_info(report)
 ~%]
  - We recommend reporting this to

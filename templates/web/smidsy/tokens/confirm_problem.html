@@ -1,5 +1,4 @@
 [% INCLUDE 'header.html', bodyclass = 'fullwidthpage', title = loc('Confirmation') %]
-[% SET s = c.cobrand.get_severity(report.extra.severity) %]
 
 <div class="confirmation-header">
 
@@ -10,7 +9,7 @@
         Reports like this will help campaigners and planners improve cycling safety across the UK.
     </h2>
 
-  [% IF s.value > 10 && report.extra.participants.match('(car|motorcycle|hgv|other)') %]
+  [% IF c.cobrand.show_police_info(report) %]
     [%~ SET police = c.cobrand.get_police_info(report) %]
     <p>
       [% IF report.bodies_str %]
