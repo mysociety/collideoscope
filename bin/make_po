@@ -89,6 +89,13 @@ sub translate {
     $s =~ s/\(like graffiti.*\)/ /;
     $s =~ s/(Please enter your full name).*? -/$1 -/;
 
+    # Quick fixes since anyone can "moderate" their own report on Collidescope.
+    # The "show your name" change might be a bit odd for site admins (who really
+    # *are* moderating other people's reports) but it'll do for now.
+    $s =~ s/\bModerate\b/Edit/g;
+    $s =~ s/\bModerate this report\b/Edit this report/g;
+    $s =~ s/\bShow reporter&rsquo;s name\b/Show your name publicly/g;
+
     $s =~ s{We send it to the council on your behalf}
            {The details will be sent to the local highways department and/or police constabulary};
     $s =~ s/To find out what local alerts we have for you/To find out what local alerts we have in your area, council or ward/;
