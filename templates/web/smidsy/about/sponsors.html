@@ -4,23 +4,27 @@
 
 <h1>[% loc('Sponsors') %]</h1>
 
-<div class="sponsors__secondary">
-    <div>
-        <a href="https://www.mysociety.org">
-            <img src="/cobrands/smidsy/images/sponsor-mysociety.gif" width="200" height="80" alt="mySociety">
-        </a>
-    </div>
-    <div>
-        <a href="http://www.itpworld.net">
-            <img src="/cobrands/smidsy/images/sponsor-itp.gif" width="200" height="80" alt="Integrated Transport Planning">
-        </a>
-    </div>
-    <div>
-        <img src="/cobrands/smidsy/images/sponsor-blanco-small.gif" width="200" height="80" alt="This could be you! Apply to become a sponsor, below.">
-    </div>
+<div class="sponsors__logos">
+    <a href="https://www.mysociety.org">
+        <img src="/cobrands/smidsy/images/logo-mysociety.jpg" width="200" height="41" alt="mySociety">
+    </a>
+    <a href="https://www.no-excuses.org.uk/">
+        <img src="/cobrands/smidsy/images/logo-mrsp.jpg" width="150" height="122" alt="Merseyside Road Safety Partnership">
+    </a>
 </div>
 
-<p>If you're interested in supporting this project apply below.</p>
+<div class="sponsors__about">
+    <div class="sponsors__past">
+        <h2>[% loc('The journey so far') %]</h2>
+        <p><a href="https://www.mysociety.org">mySociety</a> created Collideoscope, with the support of <a href="http://www.itpworld.net/">ITP</a>, in 2014, as a site for collecting reports of both cycling incidents and near misses, in order to present a clearer picture of cycle safety in the UK.</p>
+        <p>In 2018, further support from the <a href="https://www.no-excuses.org.uk/">Merseyside Road Safety Partnership</a> enabled mySociety to conduct a renewed user-centred design excercise on Collideoscope, looking into how the site could better support the processes of council safety teams, local police forces, and cycling campaign groups. It was this research which resulted in the more detailed <a href="/reports">Statistics page</a>, police boundary data, and simplified reporting form, as well as a host of other improvements across the site. </p>
+    </div>
+    <div class="sponsors__roadmap">
+        <h2>[% loc('Our roadmap') %]</h2>
+        <p>Our research suggested a number of additional avenues for Collideoscope development, including a “heatmap” view of safety along roads and at junctions, a native mobile app, and smoother integration with police reporting systems.</p>
+        <p>If you would like to see these features implemented, get in touch about becoming a Collideoscope sponsor, below.</p>
+    </div>
+</div>
 
 <h2>Support us</h2>
 
@@ -48,17 +52,6 @@
         <input type="hidden" name="subject" value="Contact from a potential sponsor">
         <input type="hidden" name="message" value="Contact from a potential sponsor.">
     </form>
-</div>
-
-<div class="sponsors__about">
-    <div class="sponsors__past">
-        <h2>[% loc('The journey so far') %]</h2>
-        <p>With support from our sponsors we have been able to complete this initial version of Collideoscope: a site that collects both incident and near miss data in order to present a clearer picture of cycle safety in the UK</p>
-    </div>
-    <div class="sponsors__roadmap">
-        <h2>[% loc('Our roadmap') %]</h2>
-        <p>We are currently focused on the launch of Collideoscope, but intend to add a number of additional features to the site if we can attract more sponsors. In the future we would like to add notifications to the relevant police department, add incident-aware route planning and create a mobile application to offer advice to someone involved in an incident.</p>
-    </div>
 </div>
 
 [% INCLUDE 'footer.html' %]
