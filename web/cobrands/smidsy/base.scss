@@ -428,6 +428,16 @@ p.confirmation-header__more {
   line-height: 1.5;
 }
 
+// Hide moderation reason input, because people can "moderate" (edit)
+// their own reports on Collideoscope, and it's weird asking them to
+// give a reason for their own edits!!
+// This also means the moderation reason won't show up for admins
+// editing *other people's* reports, but we can live with that.
+input[name="moderation_reason"],
+label[for="moderation_reason"] {
+  display: none;
+}
+
 // mySociety standard footer bits
 $mysoc-footer-background-color: $color-neutral-slategrey;
 $mysoc-footer-text-color: mix(#fff, $color-neutral-slategrey, 50%);
