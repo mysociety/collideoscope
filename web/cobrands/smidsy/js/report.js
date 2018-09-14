@@ -106,4 +106,20 @@ $(function() {
         $("#filter_categories").val(categories).trigger("change");
     });
 
+    if ($("#sub_map_links").length && fixmystreet.map && fixmystreet.map.getLayersByName("Heatmap").length) {
+        var layer = fixmystreet.map.getLayersByName("Heatmap")[0];
+        var label = layer.getVisibility() ? "Hide heatmap" : "Show heatmap";
+        var $a = $("<a href='#'></a>").text(label).click(function() {
+            if (layer.getVisibility()) {
+                $a.text("Show heatmap");
+                layer.setVisibility(false);
+            } else {
+                $a.text("Hide heatmap");
+                layer.setVisibility(true);
+            }
+            return false;
+        });
+        $a.appendTo("#sub_map_links");
+    }
+
 });
