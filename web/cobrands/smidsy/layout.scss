@@ -294,6 +294,7 @@ body.twothirdswidthpage {
 
   h1 {
     font-size: 38px;
+    max-width: none;
   }
 
   p.lead {
@@ -302,6 +303,10 @@ body.twothirdswidthpage {
 
   #postcodeForm {
     padding-bottom: 1em;
+
+    label {
+      font-size: 1.5em;
+    }
 
     div {
       width: 500px;
