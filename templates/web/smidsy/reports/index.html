@@ -35,8 +35,8 @@
                 <option value="">All areas</option>
                 [% IF area_body %]
                 <option value="wards"[% ' selected' IF area == area_body OR area == 'wards' %]>All wards</option>
-                [% FOR c IN children.sort('name') %]
-                <option value="[% c.id %]"[% ' selected' IF c.id == area %]>[% c.name | html ~%]</option>
+                [% FOR ward IN children.sort('name') %]
+                <option value="[% ward.id %]"[% ' selected' IF ward.id == area %]>[% ward.name | html ~%]</option>
                 [% END %]
                 [% ELSE %]
                 [% FOR b IN bodies # Not body as 'body' may be on stash %]
