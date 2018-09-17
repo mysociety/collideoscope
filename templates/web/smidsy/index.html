@@ -1,6 +1,9 @@
 [% pre_container_extra = PROCESS 'around/postcode_form.html' %]
 [% SET bodyclass = 'frontpage fullwidthpage' %]
 [% INCLUDE 'header.html', title = '' %]
+[% extra_js = [
+    version('/cobrands/smidsy/js/front-page.js'),
+] -%]
 
 [% IF error %]
     <p class="form-error">[% error %]</p>

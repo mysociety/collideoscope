@@ -111,15 +111,17 @@ body.twothirdswidthpage {
   background-repeat: no-repeat;
   background-position: center top;
   color: #fff;
-  padding: 2em;
+  padding: 1em;
 
   h1, p, label, #geolocate_link {
     text-shadow: 0 1px 1px rgba(#000, 0.5), 0 0 20px #000;
   }
 
   h1 {
+    font-size: 2em;
     line-height: 1.2;
     margin: 0 auto 0.5em auto;
+    max-width: 7em; // break nicely onto two lines
   }
 
   p {
@@ -127,21 +129,23 @@ body.twothirdswidthpage {
   }
 
   p.lead {
-    font-size: 1.5em;
+    font-size: 1.2em;
     line-height: 1.2;
-    margin: 0 auto 0.5em auto;
+    margin: 0 auto;
     max-width: 24em;
   }
 
   #postcodeForm {
+    padding: 1em 0 0.5em 0;
     margin: 0; // override ".full-width" negative horizontal margins
     background: transparent;
     color: inherit;
 
     label {
       color: inherit;
-      margin: 0.5em 0 16px 0;
-      font-size: 21px;
+      margin: 0 0 0.5em 0;
+      font-size: 1.2em;
+      line-height: 1.2;
     }
 
     div {
@@ -223,6 +227,62 @@ body.twothirdswidthpage {
     // ...but we don't want to hide content on .aroundpage!
     body.aroundpage & {
       display: block;
+    }
+  }
+}
+
+#report-now,
+#report-now-form {
+  display: none; // will be shown later
+  padding: 1em;
+  color: #fff;
+  background-color: #a80000;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+#report-now {
+  background-image: linear-gradient(to bottom, #d20000, #a80000);
+  cursor: pointer;
+
+  .js & {
+    display: block;
+  }
+
+  h2 {
+    font-size: 1em;
+    line-height: 1.3;
+    margin: 0 0 0.2em 0;
+    font-weight: bold;
+  }
+
+  p {
+    font-size: 0.875em;
+    line-height: 1.3;
+    margin: 0;
+  }
+}
+
+#report-now-form {
+  padding-top: 0;
+
+  label {
+    margin-top: 0;
+    line-height: 1;
+  }
+
+  p {
+    margin-bottom: 1em;
+  }
+
+  .btn {
+    width: 100%;
+    background: $color-primary-orange;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+    border: none;
+
+    &:hover {
+      background: darken($color-primary-orange, 10%);
     }
   }
 }
