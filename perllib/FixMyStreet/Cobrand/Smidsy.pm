@@ -603,7 +603,7 @@ sub generate_graph_data {
             pattern => '%F', # yyyy-mm-dd
         )->parse_datetime($c->stash->{end_date});
 
-        use FixMyStreet::Script::UpdateAllReports;
+        require FixMyStreet::Script::UpdateAllReports;
 
         my ($period, $extra) = FixMyStreet::Script::UpdateAllReports::get_period_group($start, $end);
 
