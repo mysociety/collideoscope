@@ -1,0 +1,30 @@
+[% IF bodyclass.match('frontpage') %]
+    <div id="report-now">
+        <h2>Yikes! Had a close call?</h2>
+        <p>Tap here to report a cycling incident or near-miss that’s just
+        happened, and we’ll email you later with guidance on what to do.</p>
+    </div>
+    <form action="/import" method="POST" id="report-now-form">
+        <input type="hidden" name="web" value="1">
+        <input id="report-now-latitude" type="hidden" name="lat">
+        <input id="report-now-longitude" type="hidden" name="lon">
+        <input type="hidden" name="subject" value="report now">
+        <input type="hidden" name="service" value="front-button">
+        <p>
+            <label for="form_name">Name</label>
+            <input id="form_name" type="text" name="name" class="form-control required" required>
+        </p>
+        <p>
+            <label for="form_email">Email</label>
+            <input id="form_email" type="email" name="email" class="form-control required" required>
+        </p>
+        <input class="btn" id="form_submit" type="submit" value="Set reminder">
+    </form>
+[% END %]
+
+<header id="site-header" role="banner">
+    <div class="container">
+        [% INCLUDE 'header_logo.html' %]
+        <a href="#main-nav" id="nav-link">Main Navigation</a>
+    </div>
+</header>

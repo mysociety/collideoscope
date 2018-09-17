@@ -231,14 +231,60 @@ body.twothirdswidthpage {
   }
 }
 
-#front__report-now {
-    form#front__report-now-form {
-      display: none;
-    }
+#report-now,
+#report-now-form {
+  display: none; // will be shown later
+  padding: 1em;
+  color: #fff;
+  background-color: #a80000;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+}
 
-    .invalid {
-      border: 1px solid red;
+#report-now {
+  background-image: linear-gradient(to bottom, #d20000, #a80000);
+  cursor: pointer;
+
+  .js & {
+    display: block;
+  }
+
+  h2 {
+    font-size: 1em;
+    line-height: 1.3;
+    margin: 0 0 0.2em 0;
+    font-weight: bold;
+  }
+
+  p {
+    font-size: 0.875em;
+    line-height: 1.3;
+    margin: 0;
+  }
+}
+
+#report-now-form {
+  padding-top: 0;
+
+  label {
+    margin-top: 0;
+    line-height: 1;
+  }
+
+  p {
+    margin-bottom: 1em;
+  }
+
+  .btn {
+    width: 100%;
+    background: $color-primary-orange;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+    border: none;
+
+    &:hover {
+      background: darken($color-primary-orange, 10%);
     }
+  }
 }
 
 .front__how-it-works,

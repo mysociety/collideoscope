@@ -1,8 +1,8 @@
 var fixmystreet = fixmystreet || {};
 
 (function(){
-    var link = document.getElementById('report_now');
-    var form = document.getElementById('front__report-now-form');
+    var link = document.getElementById('report-now');
+    var form = document.getElementById('report-now-form');
     if (!link) { return; }
     var https = window.location.protocol.toLowerCase() === 'https:';
     if ('geolocation' in navigator && https && window.addEventListener && fixmystreet.geolocate) {
