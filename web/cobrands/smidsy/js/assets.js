@@ -10,15 +10,15 @@ var heatmap_style = new OpenLayers.Style({}, {
             // "density" is incidents-per-metre for this road feature
             var density = parseFloat(feature.attributes.density);
             if (density < 0.001) {
-                return "#fff5eb";
+                return "#b0a284";
             } else if (density < 0.01) {
-                return "#fed2a6";
+                return "#cea44b";
             } else if (density < 0.1) {
-                return "#fd9243";
+                return "#ffae00";
             } else if (density < 1) {
-                return "#df4f05";
+                return "#ff6c00";
             } else {
-                return "#7f2704";
+                return "#ff0000";
             }
         },
         getStrokeWidth: function() {
