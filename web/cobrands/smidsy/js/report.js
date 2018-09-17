@@ -106,20 +106,40 @@ $(function() {
         $("#filter_categories").val(categories).trigger("change");
     });
 
-    if ($("#sub_map_links").length && fixmystreet.map && fixmystreet.map.getLayersByName("Heatmap").length) {
-        var layer = fixmystreet.map.getLayersByName("Heatmap")[0];
-        var label = layer.getVisibility() ? "Hide heatmap" : "Show heatmap";
-        var $a = $("<a href='#'></a>").text(label).click(function() {
-            if (layer.getVisibility()) {
-                $a.text("Show heatmap");
-                layer.setVisibility(false);
-            } else {
-                $a.text("Hide heatmap");
-                layer.setVisibility(true);
-            }
-            return false;
-        });
-        $a.appendTo("#sub_map_links");
-    }
+    if (fixmystreet.map) {
+        var layer;
+        if (fixmystreet.page === "reports" && !fixmystreet.map.getLayersByName("Heatmap").length) {
+            layer = fixmystreet.assets.layers[0];
+            if (layer && layer.name === "Heatmap") {
+                fixmystreet.map.addLayer(layer);
 
+                // Don't cover the existing pins layer
+                var pins_layer = fixmystreet.map.getLayersByName("Pins")[0];
+                if (pins_layer) {
+                    layer.setZIndex(pins_layer.getZIndex()-1);
+                }
+            }
+        }
+
+        if ($("#sub_map_links").length && fixmystreet.map.getLayersByName("Heatmap").length) {
+            layer = fixmystreet.map.getLayersByName("Heatmap")[0];
+            var label = layer.getVisibility() ? "Hide heatmap" : "Show heatmap";
+            var $a = $("<a href='#'></a>").text(label).click(function() {
+                if (layer.getVisibility()) {
+                    $a.text("Show heatmap");
+                    layer.setVisibility(false);
+                } else {
+                    $a.text("Hide heatmap");
+                    layer.setVisibility(true);
+                }
+                return false;
+            });
+            $a.appendTo("#sub_map_links");
+            fixmystreet.map.events.register("zoomend", layer, function() {
+                $a.toggle(this.inRange);
+            });
+            $a.toggle(layer.inRange);
+
+        }
+    }
 });
