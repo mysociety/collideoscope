@@ -111,15 +111,17 @@ body.twothirdswidthpage {
   background-repeat: no-repeat;
   background-position: center top;
   color: #fff;
-  padding: 2em;
+  padding: 1em;
 
   h1, p, label, #geolocate_link {
     text-shadow: 0 1px 1px rgba(#000, 0.5), 0 0 20px #000;
   }
 
   h1 {
+    font-size: 2em;
     line-height: 1.2;
     margin: 0 auto 0.5em auto;
+    max-width: 7em; // break nicely onto two lines
   }
 
   p {
@@ -127,21 +129,23 @@ body.twothirdswidthpage {
   }
 
   p.lead {
-    font-size: 1.5em;
+    font-size: 1.2em;
     line-height: 1.2;
-    margin: 0 auto 0.5em auto;
+    margin: 0 auto;
     max-width: 24em;
   }
 
   #postcodeForm {
+    padding: 1em 0 0.5em 0;
     margin: 0; // override ".full-width" negative horizontal margins
     background: transparent;
     color: inherit;
 
     label {
       color: inherit;
-      margin: 0.5em 0 16px 0;
-      font-size: 21px;
+      margin: 0 0 0.5em 0;
+      font-size: 1.2em;
+      line-height: 1.2;
     }
 
     div {
