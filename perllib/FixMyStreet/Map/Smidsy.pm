@@ -6,6 +6,9 @@ use base 'FixMyStreet::Map::OSM::TonerLite';
 
 use strict;
 
+use constant ZOOM_LEVELS    => 9;
+use constant MIN_ZOOM_LEVEL    => 10;
+
 sub map_javascript { [
     '/vendor/OpenLayers/OpenLayers.wfs.js',
     "https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js?v1.3.0",
