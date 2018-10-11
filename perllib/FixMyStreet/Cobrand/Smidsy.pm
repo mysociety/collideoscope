@@ -482,11 +482,11 @@ sub report_page_data {
     $c->forward('/dashboard/construct_rs_filter') if $c->stash->{start_date};
 
     if ( my $source = $c->get_param('sources' ) ) {
-        my $rs = $c->stash->{problems_rs};
+        my $rs = $c->stash->{objects_rs};
         if ( $source ne 'stats19' ) {
             $source = undef;
         }
-        $c->stash->{problems_rs} = $rs->search( { external_body => $source } );
+        $c->stash->{objects_rs} = $rs->search( { external_body => $source } );
     }
 
     my %participants = (
@@ -508,23 +508,23 @@ sub report_page_data {
     if ( my $transport = $c->get_param('transport') ) {
         if ( $participants{$transport} ) {
             $c->stash->{transport} = $transport;
-            my $rs = $c->stash->{problems_rs};
+            my $rs = $c->stash->{objects_rs};
             my $filter = "%T12:participants,T\\d+:$transport,%";
-            $c->stash->{problems_rs} = $rs->search( { extra => \[ 'SIMILAR to ?', [ {} => $filter ] ] } );
+            $c->stash->{objects_rs} = $rs->search( { extra => \[ 'SIMILAR to ?', [ {} => $filter ] ] } );
         }
     }
 
     if ( my $area = $c->get_param('area') ) {
         $c->stash->{area} = $area;
-        my $rs = $c->stash->{problems_rs};
+        my $rs = $c->stash->{objects_rs};
         if (my $body = $c->get_param('area_body') and $area ne 'wards') {
             $c->stash->{area_body} = $body;
-            $c->stash->{problems_rs} = $rs->search( areas => { 'like', '%,' . $area . ',%' } );
+            $c->stash->{objects_rs} = $rs->search( areas => { 'like', '%,' . $area . ',%' } );
             $c->stash->{children} = $self->get_body_children( $body );
         } else {
             $area = $c->get_param('area_body') if $area eq 'wards';
             $c->stash->{area_body} = $area;
-            $c->stash->{problems_rs} = $rs->search( { bodies_str => $area } );
+            $c->stash->{objects_rs} = $rs->search( { bodies_str => $area } );
             $c->stash->{children} = $self->get_body_children( $area );
         }
     }
@@ -542,7 +542,7 @@ sub download_csv {
     my ( $self, $c ) = @_;
 
     $c->stash->{csv} = {
-        problems => $c->stash->{problems_rs}->search_rs({}, {
+        problems => $c->stash->{objects_rs}->search_rs({}, {
             order_by => { '-desc' => 'me.confirmed' },
         }),
         headers => [
@@ -610,7 +610,7 @@ sub generate_graph_data {
         my @problem_periods = FixMyStreet::Script::UpdateAllReports::loop_period($loop_start, $extra, $period, $end->clone);
 
         my %problems_reported_by_period = FixMyStreet::Script::UpdateAllReports::stuff_by_day_or_year(
-            $period, $c->stash->{problems_rs},
+            $period, $c->stash->{objects_rs},
             state => [ FixMyStreet::DB::Result::Problem->visible_states() ],
         );
 
@@ -627,7 +627,7 @@ sub generate_graph_data {
     my @severities = qw/miss slight serious fatal/;
     my %reports_by_severity;
 
-    my $sev_rs = $c->stash->{problems_rs}->search({},
+    my $sev_rs = $c->stash->{objects_rs}->search({},
         {
             select => [ 'category', { count => 'me.id' } ],
             as => ['category', 'total'],
@@ -640,7 +640,7 @@ sub generate_graph_data {
         $reports_by_severity{$sev} += $r->get_column('total');
     }
 
-    my $participants_rs = $c->stash->{problems_rs}->search({},
+    my $participants_rs = $c->stash->{objects_rs}->search({},
         {
             select => [ \"substring(me.extra from 'T12:participants,T\\d+:([^,]*),') as participants", { count => 'me.id' } ],
             as => ['participants', 'total'],
