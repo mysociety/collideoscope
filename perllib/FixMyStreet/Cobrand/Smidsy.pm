@@ -649,6 +649,7 @@ sub generate_graph_data {
     my %reports_by_participants;
     while ( my $participants = $participants_rs->next ) {
         my $p = $participants->get_column('participants') || 'unknown';
+        $p = 'motor vehicle' if $p eq 'vehicle';
         $reports_by_participants{$p} += $participants->get_column('total');
     }
 
