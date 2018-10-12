@@ -42,6 +42,7 @@ In order to import Stats19 data from scratch, you need to run through the follow
    script at any time and use the data you've got (a few reports are probably
    enough for development), or you can wait 3 minutes and re-run until you get
    enough to meet your needs - the script will skip existing reports.
+   Alternatively, connect to the mySociety VPN to lift the MapIt rate limit.
 9. Don't forget to update the `LATEST_STATS19_UPDATE` constant in `Smidsy.pm`.
 
 Running this site as part of a FixMyStreet vagrant install
