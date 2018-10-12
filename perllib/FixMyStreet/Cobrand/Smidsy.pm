@@ -22,7 +22,7 @@ use constant language_domain => 'Smidsy';
 
 use constant STATS19_IMPORT_USER => 'hakim+smidsy@mysociety.org';
 use constant EARLIEST_STATS19_UPDATE => 2013; # TODO, constant for now
-use constant LATEST_STATS19_UPDATE => 2016; # TODO, constant for now
+use constant LATEST_STATS19_UPDATE => 2017; # TODO, constant for now
 
 sub allow_photo_upload { 0 }
 
