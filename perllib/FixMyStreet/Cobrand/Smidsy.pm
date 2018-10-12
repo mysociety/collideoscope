@@ -264,7 +264,7 @@ sub report_new_munge_before_insert {
                 car => 'a car',
                 hgv => 'an HGV',
                 motorcycle => 'a motorcycle',
-            }->{$participant} || 'a vehicle';
+            }->{$participant} || 'a motor vehicle';
             "a bicycle and $participant_description";
         }
     };
