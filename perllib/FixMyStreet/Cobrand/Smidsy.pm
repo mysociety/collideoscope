@@ -39,7 +39,6 @@ sub severity_categories {
             value => 10,
             name => 'Near miss',
             code => 'miss',
-            description => 'could have involved scrapes and bruises',
         },
         {
             value => 30,
