@@ -15,6 +15,7 @@ use JSON::MaybeXS;
 use LWP::UserAgent;
 use Try::Tiny;
 use List::Util 'first';
+use POSIX 'strcoll';
 
 use constant fourweeks => 4*7*24*60*60;
 
@@ -513,10 +514,16 @@ sub report_page_data {
         }
     }
 
+    my $areas = mySociety::MaPit::call('areas', ['WMC']);
+    $c->stash->{constituencies} = [ sort { strcoll($a->{name}, $b->{name}) } values %$areas ];
+
     if ( my $area = $c->get_param('area') ) {
         $c->stash->{area} = $area;
         my $rs = $c->stash->{objects_rs};
-        if (my $body = $c->get_param('area_body') and $area ne 'wards') {
+        if ($area =~ s/^WMC://) {
+            $c->stash->{area} = $area;
+            $c->stash->{objects_rs} = $rs->search( areas => { 'like', '%,' . $area . ',%' } );
+        } elsif (my $body = $c->get_param('area_body') and $area ne 'wards') {
             $c->stash->{area_body} = $body;
             $c->stash->{objects_rs} = $rs->search( areas => { 'like', '%,' . $area . ',%' } );
             $c->stash->{children} = $self->get_body_children( $body );

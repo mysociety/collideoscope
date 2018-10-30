@@ -34,16 +34,29 @@
             <select class="form-control" id="area" name="area">
                 <option value="">All areas</option>
                 [% IF area_body %]
-                <option value="wards"[% ' selected' IF area == area_body OR area == 'wards' %]>All wards</option>
-                [% FOR ward IN children.sort('name') %]
-                <option value="[% ward.id %]"[% ' selected' IF ward.id == area %]>[% ward.name | html ~%]</option>
-                [% END %]
+                    <option value="wards"[% ' selected' IF area == area_body OR area == 'wards' %]>All wards</option>
+                    [% FOR ward IN children.sort('name') %]
+                        <option value="[% ward.id %]"[% ' selected' IF ward.id == area %]>[% ward.name | html ~%]</option>
+                    [% END %]
                 [% ELSE %]
-                [% FOR b IN bodies # Not body as 'body' may be on stash %]
-                <option value="[% b.id %]"[% ' selected' IF b.id == area %]>[% b.name | html ~%]
-                    [% IF NOT b.get_column("area_count") %] [% loc('(no longer exists)') %][% END ~%]
-                </option>
-                [% END %]
+                    [% IF constituencies %]
+                        <optgroup label="Councils">
+                    [% END %]
+                    [% FOR b IN bodies # Not body as 'body' may be on stash %]
+                        <option value="[% b.id %]"[% ' selected' IF b.id == area %]>[% b.name | html ~%]
+                            [% IF NOT b.get_column("area_count") %] [% loc('(no longer exists)') %][% END ~%]
+                        </option>
+                    [% END %]
+                    [% IF constituencies %]
+                        </optgroup>
+                        <optgroup label="Constituencies">
+                            [% FOR constituency IN constituencies %]
+                                <option value="WMC:[% constituency.id %]"[% ' selected' IF constituency.id == area %]>
+                                    [% constituency.name | html ~%]
+                                </option>
+                            [% END %]
+                        </optgroup>
+                    [% END %]
                 [% END %]
             </select>
         </p>
