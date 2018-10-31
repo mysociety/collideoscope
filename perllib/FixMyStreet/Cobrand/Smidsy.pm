@@ -104,8 +104,11 @@ sub get_police_info {
     return unless $j && $j->{force};
 
     my $ret = $data{$j->{force}};
-    # Set this so HTML email template can get it immediately
+    # Set this so HTML email template can get it immediately, and store it
+    # for future lookups per police force.
     $report->set_extra_metadata('police' => $ret);
+    $report->set_extra_metadata('police_force' => $j->{force});
+    $report->update;
     return $ret;
 }
 
