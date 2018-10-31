@@ -522,6 +522,7 @@ sub report_page_data {
         my $rs = $c->stash->{objects_rs};
         if ($area =~ s/^WMC://) {
             $c->stash->{area} = $area;
+            $c->stash->{area_body_name} = $areas->{$area}->{name};
             $c->stash->{objects_rs} = $rs->search( areas => { 'like', '%,' . $area . ',%' } );
         } elsif (my $body = $c->get_param('area_body') and $area ne 'wards') {
             $c->stash->{area_body} = $body;
