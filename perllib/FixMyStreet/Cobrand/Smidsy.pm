@@ -516,6 +516,18 @@ sub report_page_data {
         }
     }
 
+    my $ua = new LWP::UserAgent();
+    $ua->agent("collideoscope.org.uk");
+    my $r = $ua->get("https://data.police.uk/api/forces");
+
+    my $j = try {
+        JSON->new->utf8->allow_nonref->decode($r->content);
+    };
+    if ($j) {
+        $c->stash->{police_forces} = $j;
+    }
+
+
     if ( my $area = $c->get_param('area') ) {
         $c->stash->{area} = $area;
         my $rs = $c->stash->{objects_rs};

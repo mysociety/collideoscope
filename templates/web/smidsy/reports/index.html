@@ -99,15 +99,27 @@
     <div class="dashboard-item dashboard-item--6">
         <form class="dashboard-search">
             <h2>[% loc('Show reports on a map') %]</h2>
-            <label for="body">[% loc('Find a council') %]</label>
+            <label for="body">[% loc('Find a council or police force') %]</label>
             <div class="dashboard-search__input">
                 <select id="body" name="body" class="js-autocomplete">
+                    [% IF police_forces %]
+                        <optgroup label="Councils">
+                    [% END %]
                     <option value="">[% loc('Find your council') %]</option>
                     [% FOR b IN bodies # Not body as 'body' may be on stash %]
-                    <option value="[% b.id %]">[% b.name | html ~%]
-                        [% IF NOT b.get_column("area_count") %] [% loc('(no longer exists)') %][% END ~%]
-                    </option>
+                        <option value="[% b.id %]">[% b.name | html ~%]
+                            [%~ IF NOT b.get_column("area_count") %] [% loc('(no longer exists)') %][% END ~%]
+                        </option>
                     [% END %]
+                    [% IF police_forces %]
+                        </optgroup>
+                        <optgroup label="Police Forces">
+                            [% FOR p IN police_forces %]
+                                <option value="police:[% p.id %]">[% p.name | html ~%]</option>
+                            [% END %]
+                        </optgroup>
+                    [% END %]
+
                 </select>
             </div>
             <div class="dashboard-search__submit">
