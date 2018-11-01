@@ -474,6 +474,13 @@ sub report_page_data {
     my $self = shift;
     my $c = $self->{c};
 
+    if ( $c->get_param('body') =~ /^police:/ ) {
+        my $police = $c->get_param('body');
+        my $url = $c->uri_for( '/reports/' . $police );
+        $c->res->redirect( $url );
+        $c->detach();
+    }
+
     $c->forward('/reports/display_body_stats');
 
     my $start = DateTime->new(year => 2013, month => 1, day => 1);
@@ -551,6 +558,42 @@ sub report_page_data {
 
     return 1;
 }
+
+sub reports_body_check {
+    my ( $self, $c, $code ) = @_;
+
+    return unless $code =~ /^police:/;
+
+    use Data::Dumper;
+
+    $c->log->debug(__LINE__, Dumper($code));
+
+    # my $len = length $code;
+    # my $filter = "%T12:police_force,T$len:$code,%";
+    # $c->stash->{objects_rs} = $c->stash->{objects_rs}->search( {
+    #     'extra' => { -like => $filter }
+    # } );
+
+    $c->stash->{police_body} = $code;
+
+    return 1;
+}
+
+sub short_name {
+    my $self = shift;
+    my ($area) = @_;
+
+    $area ||= $self->{c}->stash->{police_body};
+
+    use Data::Dumper;
+    $self->{c}->log->debug(__LINE__, Dumper($area));
+
+    return URI::Escape::uri_escape_utf8($area) if $area =~ /^police:/;
+    return $area if $area =~ /^police%3A/;
+
+    return $self->next::method();
+}
+
 
 sub download_csv {
     my ( $self, $c ) = @_;
