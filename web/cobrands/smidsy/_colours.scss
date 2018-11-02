@@ -30,13 +30,13 @@ $base_bg: $color-neutral-slategrey;
 $base_fg: #000;
 
 // Background colour of navbar/header above full-screen map.
-$map_nav_bg: rgba(#000, 0.4);
+$nav_background_colour: rgba(#000, 0.4);
 
 // Nav link color.
-$nav_fg: #fff;
+$nav_colour: #fff;
 
 // Nav link :hover color.
-$nav_fg_hover: $color-primary-blue;
+$nav_hover_background_colour: $color-primary-blue;
 
 // Background color for "Click map to report" message on map page.
 $col_click_map: #fff;
