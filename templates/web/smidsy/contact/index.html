@@ -1,3 +1,6 @@
+[% extra_js = [
+    version('/js/contact.js')
+] -%]
 [% INCLUDE 'header.html',
     title = loc('Contact Us')
     robots = 'noindex,nofollow'
@@ -9,6 +12,8 @@
 <h1>[% loc('Contact Collideoscope') %]</h1>
 
 <form method="post" action="/contact/submit" class="validate">
+    <input type="hidden" name="token" value="[% csrf_token %]">
+    <input type="hidden" name="s" value="[% s %]">
     <fieldset>
         [% INCLUDE 'errors.html' %]
 
@@ -67,6 +72,8 @@
 
         [% END %]
 
+        [% INCLUDE 'contact/who.html' %]
+
         <label for="form_name">[% loc('Your name') %]</label>
         [% IF field_errors.name %]
            <div class="form-error">[% field_errors.name %]</div>
@@ -85,8 +92,6 @@
            <div class="form-error">[% field_errors.subject %]</div>
         [% END %]
         <input type="text" class="form-control required" name="subject" id="form_subject" value="[% subject | html %]" size="30">
-
-        [% INCLUDE 'contact/who.html' %]
 
         <label for="form_message">[% loc('Message') %]</label>
         [% IF field_errors.message %]
