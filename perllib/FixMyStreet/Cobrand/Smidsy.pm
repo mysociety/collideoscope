@@ -479,6 +479,7 @@ sub report_page_data {
 
     $c->stash->{start_date} = $c->get_param('start_date') || '2013-01-01';
     $c->stash->{end_date} = $c->get_param('end_date');
+    $c->stash->{ward} ||= [];
     $c->forward('/dashboard/construct_rs_filter') if $c->stash->{start_date};
 
     if ( my $source = $c->get_param('sources' ) ) {
