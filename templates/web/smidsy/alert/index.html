@@ -10,7 +10,7 @@ distance of a location.
 </p>
 
 [% IF location_error %]
-  <div class="error">[% location_error %]</div>
+  <div class="error">[% location_error | safe %]</div>
 [% ELSE %]
   [% INCLUDE 'errors.html' %]
 [% END %]

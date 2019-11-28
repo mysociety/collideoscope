@@ -19,7 +19,7 @@ INCLUDE '_email_top.html';
     collision or near-miss, so here’s a quick run down of what you should
     do next, in your own time:
   </p>
-  <table [% table_reset %]>
+  <table [% table_reset | safe %]>
     <tr>
       <th style="[% td_style %] [% td_number_style %] padding-top: 10px;">1.</th>
       <th style="[% td_style %] padding-top: 10px;">

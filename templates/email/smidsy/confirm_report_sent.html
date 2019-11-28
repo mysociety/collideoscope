@@ -9,7 +9,7 @@ INCLUDE '_email_top.html';
 %]
 
 <th style="[% td_style %][% primary_column_style %]" id="primary_column">
-  [% start_padded_box %]
+  [% start_padded_box | safe %]
   <h1 style="[% h1_style %]">Your report has been&nbsp;sent</h1>
 
 
@@ -35,7 +35,7 @@ INCLUDE '_email_top.html';
     <p style="[% p_style %]"> - If you’d like to take the matter further, why not use another one of our sites, <a href="https://www.writetothem.com/">WriteToThem.com</a>, to contact your local councillors.</p>
     <p style="[% p_style %]"> - Consider getting in touch with your <a href="https://www.cyclinguk.org/groups-listing">local campaign group</a> to help work towards safer road conditions for cyclists.</p>
 
-  [% end_padded_box %]
+  [% end_padded_box | safe %]
 </th>
 [% WRAPPER '_email_sidebar.html' object = report %]
     <h2 style="[% h2_style %]">[% report.title | html %]</h2>
