@@ -480,7 +480,7 @@ sub report_page_data {
     $c->stash->{start_date} = $c->get_param('start_date') || '2013-01-01';
     $c->stash->{end_date} = $c->get_param('end_date');
     $c->stash->{ward} ||= [];
-    $c->forward('/dashboard/construct_rs_filter') if $c->stash->{start_date};
+    my $reporting = $c->forward('/dashboard/construct_rs_filter') if $c->stash->{start_date};
 
     if ( my $source = $c->get_param('sources' ) ) {
         my $rs = $c->stash->{objects_rs};
@@ -537,7 +537,7 @@ sub report_page_data {
     }
 
     if ( $c->get_param('csv') ) {
-        $self->download_csv($c);
+        $self->download_csv($c, $reporting);
     } else {
         $self->generate_graph_data($c, $start, $end);
     }
@@ -546,51 +546,37 @@ sub report_page_data {
 }
 
 sub download_csv {
-    my ( $self, $c ) = @_;
+    my ( $self, $c, $reporting ) = @_;
 
-    $c->stash->{csv} = {
-        problems => $c->stash->{objects_rs}->search_rs({}, {
-            order_by => { '-desc' => 'me.confirmed' },
-        }),
-        headers => [
-            'Report ID',
-            'Title',
-            'Category',
-            'Created',
-            'Confirmed',
-            'Status',
-            'Latitude', 'Longitude',
-            'Query',
-            'Report URL',
-            'Source',
-            'Participants',
-        ],
-        columns => [
-            'id',
-            'title',
-            'category',
-            'created',
-            'confirmed',
-            'state',
-            'latitude', 'longitude',
-            'postcode',
-            'url',
-            'external_body',
-            'participants'
-        ],
-        extra_data => sub {
-            my $report = shift;
+    $reporting->objects_attrs({
+        order_by => { '-desc' => 'me.confirmed' },
+    });
+    $reporting->add_csv_columns(
+        id => 'Report ID',
+        title => 'Title',
+        category => 'Category',
+        created => 'Created',
+        confirmed => 'Confirmed',
+        state => 'Status',
+        latitude => 'Latitude',
+        longitude => 'Longitude',
+        postcode => 'Query',
+        url => 'Report URL',
+        external_body => 'Source',
+        participants => 'Participants',
+    );
+    $reporting->csv_extra_data({
+        my $report = shift;
 
-            my $data = $report->get_extra_metadata;
+        my $data = $report->get_extra_metadata;
 
-            return {
-                external_body => $report->external_body,
-                participants => $data->{participants} || '',
-            };
-        },
-        filename => 'collideoscope-data',
-    };
-    $c->forward('/dashboard/generate_csv');
+        return {
+            external_body => $report->external_body,
+            participants => $data->{participants} || '',
+        };
+    });
+    $reporting->filename('collideoscope-data');
+    $reporting->generate_csv_http($c);
 }
 
 sub generate_graph_data {
