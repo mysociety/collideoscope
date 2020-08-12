@@ -32,7 +32,7 @@ sub enter_postcode_text {
     return _('Enter a street, area, or landmark');
 }
 
-sub report_sent_confirmation_email { 1 }
+sub report_sent_confirmation_email { 'id' }
 
 sub severity_categories {
     return [
