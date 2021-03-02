@@ -1,2 +1,0 @@
-Yours,  
-The [% site_name %] team

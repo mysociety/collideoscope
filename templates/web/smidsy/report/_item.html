@@ -1,7 +1,0 @@
-<li class="item-list__item item-list--reports__item [% item_extra_class %]">
-    [% UNLESS problem.title; problem = problem.problem; END %]
-    <a href="[% problem.url %]" class="[% problem.category %]">
-        <h3>[% problem.title | html %]</h3>
-        <p>[%- prettify_dt( problem.confirmed, 1 ) %]</p>
-    </a>
-</li>

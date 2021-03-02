@@ -1,5 +1,0 @@
-[% UNLESS problem.external_body == "stats19" OR c.user_exists %]
-    [% INCLUDE 'report/_update-form-heading.html' %]
-    <p>If this is your report, <a href="/auth?r=[% c.req.uri.path %]">you can log in to leave an update</a>.</p>
-    <p>Updates are not sent to the council, but they can be helpful for anyone trying to understand what happened after you reported this incident.</p>
-[% END %]
