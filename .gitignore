@@ -7,3 +7,4 @@ data/stats19/casualties.csv
 data/stats19/vehicles.csv
 data/stats19/accidents.csv
 data/stats19/stats19.db*
+web/down.html
